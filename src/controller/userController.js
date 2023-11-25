@@ -2,7 +2,7 @@ const knex = require("../database/connection");
 const bcrypt = require("bcrypt");
 
 const registerUser = async (req, res) => {
-	const { username, senha } = req.body;
+	const { username, email, senha } = req.body;
 
 	if (!username) {
 		return res.status(404).json("O campo username é obrigatório");
@@ -16,6 +16,7 @@ const registerUser = async (req, res) => {
 
 	try {
 		const quantidadeUsuarios = await knex("usuarios").where({ username }).first();
+		console.log(username, email, senha);
 
 		if (quantidadeUsuarios) return res.status(400).json("O username informado já esxiste");
 
