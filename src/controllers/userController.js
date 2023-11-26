@@ -41,6 +41,40 @@ const userRegister = async (req, res) => {
   }
 }
 
+const userDetail = async (req, res) => {
+  const { senha: _, ...userLogged } = req.user
+
+  return res.status(200).json(userLogged)
+}
+
+const userUpdate = async (req, res) => {
+  const { nome, email, senha } = req.body
+  const { id } = req.user
+
+  try {
+    const checkUser = await knex("usuarios").where({ email })
+    if (checkUser.length > 0) {
+      return res.status(showStatus).json({ message: "E-mail já existe." })
+    }
+
+    const encryptedPassword = await bcrypt.hash(senha, 10)
+
+    await knex("usuarios")
+      .update({
+        nome,
+        email,
+        senha: encryptedPassword
+      })
+      .returning("*")
+
+    return res.status(204).send()
+  } catch (error) {
+    return res.status(500).json('Erro interno do servidor')
+  }
+}
+
 module.exports = {
   userRegister,
+  userDetail,
+  userUpdate
 }
