@@ -41,6 +41,12 @@ const userRegister = async (req, res) => {
   }
 }
 
+const userDetail = async (req, res) => {
+  const { senha: _, ...userLogged } = req.user
+
+  return res.json(userLogged)
+}
+
 module.exports = {
   userRegister,
 }
