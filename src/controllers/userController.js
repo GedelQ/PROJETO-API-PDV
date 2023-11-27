@@ -42,9 +42,9 @@ const userRegister = async (req, res) => {
 }
 
 const userDetail = async (req, res) => {
-  const { senha: _, ...userLogged } = req.user
+  const user = req.user
 
-  return res.status(200).json(userLogged)
+  return res.status(200).json(user)
 }
 
 const userUpdate = async (req, res) => {
