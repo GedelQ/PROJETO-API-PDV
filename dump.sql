@@ -14,8 +14,9 @@ CREATE TABLE IF NOT EXISTS categorias (
     descricao VARCHAR(50) NOT NULL
 );
 
-INSERT INTO categorias (descricao) 
-VALUES 
+INSERT INTO categorias 
+(descricao) 
+VALUES
 ('Informática'),
 ('Celulares'),
 ('Beleza e Perfumaria'),
