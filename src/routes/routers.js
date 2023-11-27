@@ -1,17 +1,22 @@
 // const validateRequestBody = require('./middlewares/validateRequestBody')
 // const schemaUser = require('./schemas/schemaUser')
-const express = require("express")
-const { listCategories } = require("../controllers/categorieController")
-const { login } = require("../controllers/loginContoller")
-const { userRegister, userDetail, userUpdate } = require("../controllers/userController")
+const express = require("express");
+const { listCategories } = require("../controllers/categorieController");
+const { login } = require("../controllers/loginContoller");
+const { userRegister, userDetail, userUpdate } = require("../controllers/userController");
+const checkUserToken = require("../middlewares/middlewares");
 
-const routes = express()
+const routes = express();
 
-routes.get("/categoria", listCategories)
+routes.get("/categoria", listCategories);
 
-routes.post("/usuario", userRegister)
-routes.post("/login", login)
-routes.get("/usuario", userDetail)
-routes.put("/usuario", userUpdate)
+routes.post("/usuario", userRegister);
 
-module.exports = routes
+routes.post("/login", login);
+
+routes.use(checkUserToken);
+
+routes.get("/usuario", userDetail);
+routes.put("/usuario", userUpdate);
+
+module.exports = routes;
