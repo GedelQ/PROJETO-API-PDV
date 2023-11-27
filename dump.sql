@@ -3,6 +3,7 @@ CREATE DATABASE pdv;
 
 CREATE TABLE IF NOT EXISTS usuarios (
     ID SERIAL PRIMARY KEY,
+
     nome VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
     senha VARCHAR(120) NOT NULL
@@ -11,11 +12,12 @@ CREATE TABLE IF NOT EXISTS usuarios (
 
 CREATE TABLE IF NOT EXISTS categorias (
     ID SERIAL PRIMARY KEY,
-    descricao VARCHAR(50) NOT NULL
+    descricao VARCHAR NOT NULL
 );
 
-INSERT INTO categorias (descricao) 
-VALUES 
+INSERT INTO categorias 
+(descricao) 
+VALUES
 ('Informática'),
 ('Celulares'),
 ('Beleza e Perfumaria'),
