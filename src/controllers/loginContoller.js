@@ -28,7 +28,7 @@ const login = async (req, res) => {
     if (!correctPassword) {
       return res.status(401).json("Email ou senha estão incorretos.")
     }
-    const token = jwt.sign({ id: user.id }, process.env.API_PRIVATE_KEY, {
+    const token = jwt.sign({ id: user.id }, process.env.JWT_PRIVATE_KEY, {
       expiresIn: "8h",
     })
 

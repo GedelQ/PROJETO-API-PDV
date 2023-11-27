@@ -26,15 +26,21 @@ const userRegister = async (req, res) => {
 
 		const encryptedPassword = await bcrypt.hash(senha, 10)
 
-		const user = await knex("usuarios").insert({ nome, email, senha: encryptedPassword }).returning(["id", "nome", "email"])
 
+		const user = await knex("usuarios")
+			.insert({ nome, email, senha: encryptedPassword })
+			.returning(["id", "nome", "email"])
+
+	
 		if (!user) {
 			return res.status(400).json({ message: "O usuário não foi cadastrado." })
 		}
 
 		return res.status(201).json(user)
 	} catch (error) {
+
 		return res.status(400).json({ message: "Erro interno do servidor." })
+
 	}
 }
 
@@ -50,6 +56,8 @@ const userUpdate = async (req, res) => {
 	const { id } = req.user
 
 	try {
+
+
 		const encryptedPassword = await bcrypt.hash(senha, 10)
 
 		const userUpdated = await knex("usuarios")
@@ -69,6 +77,7 @@ const userUpdate = async (req, res) => {
 			return res.status(400).json({ message: "E-mail já existe." })
 		}
 		else return res.status(500).json("Erro interno do servidor")
+
 	}
 }
 
