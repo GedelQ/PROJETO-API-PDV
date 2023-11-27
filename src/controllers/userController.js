@@ -59,7 +59,7 @@ const userUpdate = async (req, res) => {
 				senha: encryptedPassword
 			})
 			.where("id", id)
-			.returning("id", "nome", "email")
+			.returning(["id", "nome", "email"])
 
 		return res.status(200).json(userUpdated)
 	} catch (error) {
