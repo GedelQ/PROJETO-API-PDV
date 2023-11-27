@@ -26,7 +26,7 @@ const userRegister = async (req, res) => {
 
 		const encryptedPassword = await bcrypt.hash(senha, 10)
 
-		const user = await knex("usuarios").insert({ nome, email, senha: encryptedPassword }).returning("*")
+		const user = await knex("usuarios").insert({ nome, email, senha: encryptedPassword }).returning(["id", "nome", "email"])
 
 		if (!user) {
 			return res.status(400).json({ message: "O usuário não foi cadastrado." })
@@ -63,10 +63,12 @@ const userUpdate = async (req, res) => {
 
 		return res.status(200).json(userUpdated)
 	} catch (error) {
-		const duplicateMail = "duplicate key value violates unique constraint \"usuarios_email_key\""
-		if (error.message === duplicateMail) {
-			return res.status(showStatus).json({ message: "E-mail já existe." })
+		const duplicateMail = 'duplicate key value violates unique constraint \"usuarios_email_key\"'
+		const duplicateMail1 = 'duplicar valor da chave viola a restrição da unicidade \"usuarios_email_key\"'
+		if (error.message.includes(duplicateMail) || error.message.includes(duplicateMail1)) {
+			return res.status(400).json({ message: "E-mail já existe." })
 		}
+		else return res.status(500).json("Erro interno do servidor")
 	}
 }
 
