@@ -1,15 +1,27 @@
 -- Use this file to create your DataBank using PostgreSQL
-create database pdv;
+CREATE DATABASE pdv;
 
-create table if not exists usuarios (
-    id serial primary key,
-    nome varChar not null,
-    email varChar not null unique,
-    senha varChar not null
+CREATE TABLE IF NOT EXISTS usuarios (
+    ID SERIAL PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    senha VARCHAR(30) NOT NULL
 );
 
 
-create table if not exists categorias (
-    id serial primary key,
-    descricao varChar not null 
+CREATE TABLE IF NOT EXISTS categorias (
+    ID SERIAL PRIMARY KEY,
+    descricao VARCHAR(50) NOT NULL
 );
+
+INSERT INTO categorias (descricao) 
+VALUES 
+('Informática'),
+('Celulares'),
+('Beleza e Perfumaria'),
+('Mercado'),
+('Livros e Papelaria'),
+('Brinquedos'),
+('Moda'),
+('Bebê'),
+('Games');
