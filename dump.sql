@@ -13,3 +13,15 @@ CREATE TABLE IF NOT EXISTS categorias (
     ID SERIAL PRIMARY KEY,
     descricao VARCHAR(50) NOT NULL
 );
+
+INSERT INTO categorias (descricao) 
+VALUES 
+('Informática'),
+('Celulares'),
+('Beleza e Perfumaria'),
+('Mercado'),
+('Livros e Papelaria'),
+('Brinquedos'),
+('Moda'),
+('Bebê'),
+('Games');
