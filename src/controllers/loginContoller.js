@@ -4,17 +4,6 @@ const jwt = require("jsonwebtoken")
 
 const login = async (req, res) => {
   const { email, senha } = req.body
-  let showStatus = 400
-  let showResult = {
-    message: `Campos email e senha são obrigatórios.`,
-  }
-
-  if (!email) {
-    return res.status(showStatus).json(showResult)
-  }
-  if (!senha) {
-    return res.status(showStatus).json(showResult)
-  }
 
   try {
     const user = await knex("usuarios").where({ email }).first()
