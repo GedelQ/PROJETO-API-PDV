@@ -31,7 +31,7 @@ const userRegister = async (req, res) => {
 			.insert({ nome, email, senha: encryptedPassword })
 			.returning(["id", "nome", "email"])
 
-	
+
 		if (!user) {
 			return res.status(400).json({ message: "O usuário não foi cadastrado." })
 		}
@@ -56,8 +56,6 @@ const userUpdate = async (req, res) => {
 	const { id } = req.user
 
 	try {
-
-
 		const encryptedPassword = await bcrypt.hash(senha, 10)
 
 		const userUpdated = await knex("usuarios")
