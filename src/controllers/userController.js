@@ -9,7 +9,7 @@ const userRegister = async (req, res) => {
     const encryptedPassword = await bcrypt.hash(senha, 10)
 
     const user = await knex("usuarios")
-      .insert({ nome, email, senha: encryptedPassword })
+      .insert({ nome, email: email.toLowerCase(), senha: encryptedPassword })
       .returning(["id", "nome", "email"])
 
     if (!user) {
@@ -49,7 +49,7 @@ const userUpdate = async (req, res) => {
 		const userUpdated = await knex("usuarios")
 			.update({
 				nome,
-				email,
+				email: email.toLowerCase(),
 				senha: encryptedPassword
 			})
 			.where("id", id)
