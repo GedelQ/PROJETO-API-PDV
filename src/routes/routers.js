@@ -30,6 +30,7 @@ routes.use(checkUserToken);
 routes.get("/usuario", userDetail);
 routes.put("/usuario", validateRequestBody(schemaUser), userUpdate);
 routes.get("/produto", listProducts);
+routes.delete("/produto/:id", deleteProduct);
 
 routes.get("/cliente", listCustomers);
 routes.get("/cliente/:id", datailCustomers);
