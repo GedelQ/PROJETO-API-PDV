@@ -13,7 +13,7 @@ const schemaProduct = joi.object({
 		"any.required": "O campo valor é obrigatório",
 		"any.empty": "O campo valor é obrigatório"
 	}),
-	categoria_id: joi.string().required().messages({
+	categoria_id: joi.required().messages({
 		"any.required": "O campo categoria_id é obrigatório",
 		"any.empty": "O campo categoria_id é obrigatório"
 	})
