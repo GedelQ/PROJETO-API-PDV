@@ -1,4 +1,3 @@
-PRINT-2-Detalhar-Produto
 const express = require("express")
 const { listCategories } = require("../controllers/categorieController")
 const { login } = require("../controllers/loginContoller")
