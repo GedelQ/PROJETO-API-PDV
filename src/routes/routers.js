@@ -6,6 +6,7 @@ const checkUserToken = require("../middlewares/middlewares")
 const validateRequestBody = require("../middlewares/validateRequestBody")
 const schemaLogin = require("../schemas/schemaLogin")
 const schemaUser = require("../schemas/schemaUser")
+const { listProducts } = require("../controllers/productController")
 const routes = express()
 
 
@@ -15,6 +16,7 @@ routes.post("/login", validateRequestBody(schemaLogin), login)
 routes.use(checkUserToken)
 routes.get("/usuario", userDetail)
 routes.put("/usuario", validateRequestBody(schemaUser), userUpdate)
+routes.get("/produto", listProducts)
 
 
 module.exports = routes
