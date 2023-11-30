@@ -14,9 +14,8 @@ const schemaProduct = require("../schemas/schemaProduct");
 const {
   listProducts,
   productCreation,
+  updateProducts,
 } = require("../controllers/productController");
-const { listCustomers } = require("../controllers/customerController");
-const { listProducts } = require("../controllers/productController");
 const {
   listCustomers,
   datailCustomers,
@@ -36,5 +35,6 @@ routes.get("/cliente", listCustomers);
 routes.get("/cliente/:id", datailCustomers);
 
 routes.post("/produto", validateRequestBody(schemaProduct), productCreation);
+routes.put("/produto/:id", validateRequestBody(schemaProduct), updateProducts);
 
 module.exports = routes;
