@@ -1,12 +1,13 @@
 const knex = require("../database/connection");
+const categoryExists = require("../services/productService");
 
 const productCreation = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
 
   try {
-    const category = await knex("categorias").where({ id: categoria_id });
-    if (category.length == 0)
-      return res.status(404).json("Categoria inválida.");
+    const exist = await categoryExists(categoria_id);
+
+    if (!exist) return res.status(404).json("Categoria inválida.");
 
     const product = await knex("produtos").insert({
       descricao,
@@ -23,6 +24,11 @@ const productCreation = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: "Erro interno do servidor." });
   }
+};
+
+const updateProducts = async (req, res) => {
+  const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
+  const { id } = req.params;
 };
 
 const listProducts = async (req, res) => {
