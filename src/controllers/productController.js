@@ -29,6 +29,30 @@ const productCreation = async (req, res) => {
 const updateProducts = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
   const { id } = req.params;
+
+  try {
+    const existProductIdParams = await categoryExists(id);
+    if (!existProductIdParams)
+      return res
+        .status(404)
+        .json("Categoria não cadastrada no bacno de dados.");
+
+    const exist = await categoryExists(categoria_id);
+    if (!exist) return res.status(404).json("Categoria inválida.");
+
+    const product = await knex("produtos")
+      .update({
+        descricao,
+        quantidade_estoque,
+        valor,
+        categoria_id,
+      })
+      .where({ id: id });
+
+    return res.status(201).json("Produto atualizado com sucesso!");
+  } catch (error) {
+    return res.status(500).json({ message: "Erro interno do servidor." });
+  }
 };
 
 const listProducts = async (req, res) => {
@@ -71,4 +95,5 @@ const listProducts = async (req, res) => {
 module.exports = {
   listProducts,
   productCreation,
+  updateProducts,
 };
