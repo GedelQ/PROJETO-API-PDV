@@ -31,13 +31,13 @@ const updateProducts = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const existProductIdParams = await categoryExists(id);
-    if (!existProductIdParams)
-      return res
-        .status(404)
-        .json("Categoria não cadastrada no bacno de dados.");
+    const productExist = await knex("produtos").where({ id: id });
+    if (productExist.length === 0) {
+      return res.status(404).json("Produto não existe em nosso estoque.");
+    }
 
     const exist = await categoryExists(categoria_id);
+
     if (!exist) return res.status(404).json("Categoria inválida.");
 
     const product = await knex("produtos")
