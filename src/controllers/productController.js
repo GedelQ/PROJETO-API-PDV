@@ -29,6 +29,40 @@ const listProducts = async (req, res) => {
   }
 }
 
+const detailProduct = async (req, res) => {
+  try {
+    const productId = req.params.id
+    const userId = req.user.id
+
+    const productFound = await knex("produtos").where("")
+
+  } catch (error) {
+
+  }
+}
+
+const deleteProduct = async (req, res) => {
+  const produtId = req.params.id
+
+  try {
+    const checkProductExistence = await knex("produtos").where("id", produtId).first()
+
+    if (!checkProductExistence) {
+      return res.status(400).json({ messagem: "operação não realizada" })
+    }
+
+    const deleted = await knex("produtos").where("id", produtId).del()
+
+    deleted
+
+    return res.status(200).json({ message: "Produto removida" })
+  } catch (error) {
+    return res.status(500).json("Erro interno do servidor")
+  }
+}
+
 module.exports = {
-  listProducts
+  listProducts,
+  detailProduct,
+  deleteProduct
 }
