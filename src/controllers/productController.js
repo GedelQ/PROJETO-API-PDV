@@ -8,8 +8,6 @@ const productCreation = async (req, res) => {
     if (category.length == 0)
       return res.status(404).json("Categoria inválida.");
 
-    console.log(category);
-
     const product = await knex("produtos").insert({
       descricao,
       quantidade_estoque,
