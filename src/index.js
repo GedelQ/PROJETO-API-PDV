@@ -9,6 +9,7 @@ app.use(express.json());
 app.use(cors());
 app.use(routes);
 
-const port = process.env.SQL_PORT;
+// const port = process.env.SQL_PORT;
 
-app.listen(port || 3000);
+// app.listen(port || 3000);
+app.listen(3000);
