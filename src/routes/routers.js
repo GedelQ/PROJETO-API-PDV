@@ -16,17 +16,24 @@ const {
   productCreation,
 } = require("../controllers/productController");
 const { listCustomers } = require("../controllers/customerController");
+const { listProducts } = require("../controllers/productController");
+const {
+  listCustomers,
+  datailCustomers,
+} = require("../controllers/customerController");
+
 const routes = express();
 
 routes.get("/categoria", listCategories);
 routes.post("/usuario", validateRequestBody(schemaUser), userRegister);
 routes.post("/login", validateRequestBody(schemaLogin), login);
-//routes.use(checkUserToken);
+routes.use(checkUserToken);
 routes.get("/usuario", userDetail);
 routes.put("/usuario", validateRequestBody(schemaUser), userUpdate);
 routes.get("/produto", listProducts);
 
 routes.get("/cliente", listCustomers);
+routes.get("/cliente/:id", datailCustomers);
 
 routes.post("/produto", validateRequestBody(schemaProduct), productCreation);
 
