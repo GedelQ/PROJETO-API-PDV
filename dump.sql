@@ -11,11 +11,11 @@ CREATE TABLE IF NOT EXISTS usuarios (
 
 CREATE TABLE IF NOT EXISTS categorias (
     id          SERIAL PRIMARY KEY,
-    descricao   VARCHAR NOT NULL
+    descricao   VARCHAR(100) NOT NULL
 );
 
-INSERT INTO categorias 
-(descricao) 
+INSERT INTO categorias
+(descricao)
 VALUES
 ('Informática'),
 ('Celulares'),
@@ -30,19 +30,19 @@ VALUES
 CREATE TABLE IF NOT EXISTS produtos (
     id                  SERIAL PRIMARY KEY,
     descricao           VARCHAR(100) NOT NULL,
-    quantidade_estoque  VARCHAR(30) NOT NULL,
-    valor               VARCHAR(30) NOT NULL,
-    categoria_id        INT NOT NULL references categorias(id)
+    quantidade_estoque  INT NOT NULL,
+    valor               INT NOT NULL,
+    categoria_id        SMALLINT NOT NULL REFERENCES categorias(id)
 );
 
 CREATE TABLE IF NOT EXISTS clientes (
     id      SERIAL PRIMARY KEY,
     nome    VARCHAR(50) NOT NULL,
     email   VARCHAR(50) NOT NULL UNIQUE,
-    cpf     VARCHAR(50) NOT NULL UNIQUE,
+    cpf     VARCHAR(15) NOT NULL UNIQUE,
     cep     VARCHAR(10),
     rua     VARCHAR(100),
-    numero  VARCHAR(5),
+    numero  SMALLINT,
     bairro  VARCHAR(50),
     cidade  VARCHAR(50),
     estado  VARCHAR(30)
