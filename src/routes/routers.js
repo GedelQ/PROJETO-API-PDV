@@ -11,7 +11,10 @@ const validateRequestBody = require("../middlewares/validateRequestBody");
 const schemaLogin = require("../schemas/schemaLogin");
 const schemaUser = require("../schemas/schemaUser");
 const { listProducts } = require("../controllers/productController");
-const { listCustomers } = require("../controllers/customerController");
+const {
+  listCustomers,
+  datailCustomers,
+} = require("../controllers/customerController");
 const routes = express();
 
 routes.get("/categoria", listCategories);
@@ -23,5 +26,6 @@ routes.put("/usuario", validateRequestBody(schemaUser), userUpdate);
 routes.get("/produto", listProducts);
 
 routes.get("/cliente", listCustomers);
+routes.get("/cliente/:id", datailCustomers);
 
 module.exports = routes;
