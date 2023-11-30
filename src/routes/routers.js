@@ -2,9 +2,9 @@ const express = require("express");
 const { listCategories } = require("../controllers/categorieController");
 const { login } = require("../controllers/loginContoller");
 const {
-  userRegister,
-  userDetail,
-  userUpdate,
+    userRegister,
+    userDetail,
+    userUpdate,
 } = require("../controllers/userController");
 const checkUserToken = require("../middlewares/middlewares");
 const validateRequestBody = require("../middlewares/validateRequestBody");
@@ -12,13 +12,15 @@ const schemaLogin = require("../schemas/schemaLogin");
 const schemaUser = require("../schemas/schemaUser");
 const schemaProduct = require("../schemas/schemaProduct");
 const {
-  listProducts,
-  productCreation,
-  updateProducts,
+    listProducts,
+    productCreation,
+    updateProducts,
+    deleteProduct,
+    detailProduct,
 } = require("../controllers/productController");
 const {
-  listCustomers,
-  datailCustomers,
+    listCustomers,
+    datailCustomers,
 } = require("../controllers/customerController");
 
 const routes = express();
@@ -30,6 +32,7 @@ routes.use(checkUserToken);
 routes.get("/usuario", userDetail);
 routes.put("/usuario", validateRequestBody(schemaUser), userUpdate);
 routes.get("/produto", listProducts);
+routes.get("/produto/:id", detailProduct);
 routes.delete("/produto/:id", deleteProduct);
 
 routes.get("/cliente", listCustomers);
