@@ -1,41 +1,41 @@
-const knex = require("../database/connection");
-const objectExists = require("../services/productService");
+const knex = require("../database/connection")
+const objectExists = require("../services/productService")
 
 const productCreation = async (req, res) => {
-  const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
+  const { descricao, quantidade_estoque, valor, categoria_id } = req.body
 
   try {
-    const categoryExist = await objectExists("categorias", categoria_id);
-    if (!categoryExist) return res.status(404).json("Categoria inválida.");
+    const categoryExist = await objectExists("categorias", categoria_id)
+    if (!categoryExist) return res.status(404).json({ message: "Categoria inválida." })
 
     const product = await knex("produtos").insert({
       descricao,
       quantidade_estoque,
       valor,
       categoria_id,
-    });
+    })
 
     if (!product) {
-      return res.status(400).json({ message: "O produto não foi cadastrado." });
+      return res.status(400).json({ message: "O produto não foi cadastrado." })
     }
 
-    return res.status(201).json("Produto cadastrado com sucesso!");
+    return res.status(201).json({ message: "Produto cadastrado com sucesso!" })
   } catch (error) {
-    return res.status(500).json({ message: "Erro interno do servidor." });
+    return res.status(500).json({ message: "Erro interno do servidor." })
   }
-};
+}
 
 const updateProducts = async (req, res) => {
-  const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
-  const { id } = req.params;
+  const { descricao, quantidade_estoque, valor, categoria_id } = req.body
+  const { id } = req.params
 
   try {
-    const productExist = await objectExists("produtos", id);
+    const productExist = await objectExists("produtos", id)
     if (!productExist)
-      return res.status(404).json("Produto não existe em nosso estoque.");
+      return res.status(404).json({ message: "Produto não existe em nosso estoque." })
 
-    const categoryExist = await objectExists("categorias", categoria_id);
-    if (!categoryExist) return res.status(404).json("Categoria inválida.");
+    const categoryExist = await objectExists("categorias", categoria_id)
+    if (!categoryExist) return res.status(404).json({ message: "Categoria inválida." })
 
     const product = await knex("produtos")
       .update({
@@ -44,30 +44,30 @@ const updateProducts = async (req, res) => {
         valor,
         categoria_id,
       })
-      .where({ id: id });
+      .where({ id: id })
 
-    return res.status(201).json("Produto atualizado com sucesso!");
+    return res.status(201).json({ message: "Produto atualizado com sucesso!" })
   } catch (error) {
-    return res.status(500).json({ message: "Erro interno do servidor." });
+    return res.status(500).json({ message: "Erro interno do servidor." })
   }
-};
+}
 
 const listProducts = async (req, res) => {
   try {
-    const { categoria } = req.query;
-    let checkProducts;
+    const { categoria } = req.query
+    let checkProducts
 
-    if (!categoria) checkProducts = await knex("produtos");
+    if (!categoria) checkProducts = await knex("produtos")
     else if (typeof categoria === typeof "String")
-      checkProducts = await knex("produtos").where("categoria_id", categoria);
+      checkProducts = await knex("produtos").where("categoria_id", categoria)
     else
       checkProducts = await knex("produtos").whereIn("categoria_id", [
         ...categoria,
-      ]);
+      ])
 
-    if (checkProducts.length === 0) throw new Error("Categoria Invalida");
+    if (checkProducts.length === 0) throw new Error({ message: "Categoria Invalida" })
 
-    return res.status(200).json(checkProducts);
+    return res.status(200).json(checkProducts)
   } catch (error) {
     if (
       error.message.includes(`sintaxe de entrada é inválida para tipo integer`)
@@ -75,50 +75,48 @@ const listProducts = async (req, res) => {
       return res
         .status(400)
         .json(
-          "Uma ou mais categorias são inválidas. Por favor verifique se esta inserindo apenas números"
-        );
+          { message: "Uma ou mais categorias são inválidas. Por favor verifique se esta inserindo apenas números" }
+        )
     }
     if (error.message === "Categoria Invalida") {
       return res
         .status(400)
         .json(
-          "Não existe nenhuma categoria com o(s) valor(es) informado(s), por favor verifique a(s) categoria(s) solicitada(s)"
-        );
+          { message: "Não existe nenhuma categoria com o(s) valor(es) informado(s), por favor verifique a(s) categoria(s) solicitada(s)" }
+        )
     }
-    return res.status(500).json("Erro interno do servidor");
+    return res.status(500).json({ message: "Erro interno do servidor" })
   }
-};
+}
 
 const detailProduct = async (req, res) => {
   try {
-    const productId = req.params.id;
-    const userId = req.user.id;
+    const productId = req.params.id
+    const userId = req.user.id
 
-    const productFound = await knex("produtos").where("");
-  } catch (error) {}
-};
+    const productFound = await knex("produtos").where("")
+  } catch (error) { }
+}
 
 const deleteProduct = async (req, res) => {
-  const produtId = req.params.id;
+  const produtId = req.params.id
 
   try {
     const checkProductExistence = await knex("produtos")
       .where("id", produtId)
-      .first();
+      .first()
 
     if (!checkProductExistence) {
-      return res.status(400).json({ messagem: "operação não realizada" });
+      return res.status(400).json({ messagem: "Operação não realizada" })
     }
 
-    const deleted = await knex("produtos").where("id", produtId).del();
+    await knex("produtos").where("id", produtId).del()
 
-    deleted;
-
-    return res.status(200).json({ message: "Produto removida" });
+    return res.status(200).json({ message: "Produto removido" })
   } catch (error) {
-    return res.status(500).json("Erro interno do servidor");
+    return res.status(500).json({ message: "Erro interno do servidor" })
   }
-};
+}
 
 module.exports = {
   listProducts,
@@ -126,4 +124,4 @@ module.exports = {
   deleteProduct,
   productCreation,
   updateProducts,
-};
+}

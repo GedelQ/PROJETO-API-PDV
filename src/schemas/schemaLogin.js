@@ -6,10 +6,10 @@ const schemaLogin = joi.object({
     "any.required": "O campo e-mail é obrigatório",
     "string.empty": "O campo e-mail é obrigatório",
   }),
-  senha: joi.string().required().min(5).messages({
+  senha: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).token().required().messages({
     "any.required": "O campo senha é obrigatório",
     "string.empty": "O campo senha é obrigatório",
-    "string.min": "A senha precisa ter 5 caracteres"
+    "string.pattern.base": "A senha precisa ter um formato valído"
   }),
 })
 
