@@ -9,9 +9,7 @@ const {
 const checkUserToken = require("../middlewares/middlewares")
 const validateRequestBody = require("../middlewares/validateRequestBody")
 const schemaLogin = require("../schemas/schemaLogin")
-const {
-  schemaUser,
-  schemaCustomer } = require("../schemas/schemaUser")
+const { schemaUser, schemaCustomer } = require("../schemas/schemaUser")
 const schemaProduct = require("../schemas/schemaProduct")
 const {
   listProducts,
@@ -23,26 +21,32 @@ const {
 const {
   listCustomers,
   datailCustomers,
-  custumerRegister,
+
+  customerRegister,
+  customerUpdate,
 } = require("../controllers/customerController")
+
 
 const routes = express()
 
 routes.get("/categoria", listCategories)
 routes.post("/usuario", validateRequestBody(schemaUser), userRegister)
 routes.post("/login", validateRequestBody(schemaLogin), login)
+
 routes.use(checkUserToken)
+
 routes.get("/usuario", userDetail)
 routes.put("/usuario", validateRequestBody(schemaUser), userUpdate)
+
 routes.get("/produto", listProducts)
 routes.get("/produto/:id", detailProduct)
 routes.delete("/produto/:id", deleteProduct)
-
-routes.post("/cliente", validateRequestBody(schemaCustomer), custumerRegister)
-routes.get("/cliente", listCustomers)
-routes.get("/cliente/:id", datailCustomers)
-
 routes.post("/produto", validateRequestBody(schemaProduct), productCreation)
 routes.put("/produto/:id", validateRequestBody(schemaProduct), updateProducts)
+
+routes.post("/cliente", validateRequestBody(schemaCustomer), customerRegister)
+routes.get("/cliente", listCustomers)
+routes.get("/cliente/:id", datailCustomers)
+routes.put("/cliente/:id", validateRequestBody(schemaCustomer), customerUpdate)
 
 module.exports = routes
