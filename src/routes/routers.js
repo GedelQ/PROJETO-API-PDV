@@ -23,7 +23,8 @@ const {
 const {
   listCustomers,
   datailCustomers,
-  custumerRegister,
+  customerRegister,
+  customerUpdate,
 } = require("../controllers/customerController")
 
 const routes = express()
@@ -38,9 +39,10 @@ routes.get("/produto", listProducts)
 routes.get("/produto/:id", detailProduct)
 routes.delete("/produto/:id", deleteProduct)
 
-routes.post("/cliente", validateRequestBody(schemaCustomer), custumerRegister)
+routes.post("/cliente", validateRequestBody(schemaCustomer), customerRegister)
 routes.get("/cliente", listCustomers)
 routes.get("/cliente/:id", datailCustomers)
+routes.put("/cliente/:id", validateRequestBody(schemaCustomer), customerUpdate)
 
 routes.post("/produto", validateRequestBody(schemaProduct), productCreation)
 routes.put("/produto/:id", validateRequestBody(schemaProduct), updateProducts)

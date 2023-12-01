@@ -1,6 +1,6 @@
 const knex = require("../database/connection")
 
-const custumerRegister = async (req, res) => {
+const customerRegister = async (req, res) => {
 
   const { nome, email, cpf } = req.body
 
@@ -16,7 +16,6 @@ const custumerRegister = async (req, res) => {
 
     return res.status(201).json(customer)
   } catch (error) {
-    console.log(error)
 
     const duplicateMail = "clientes_email_key"
     const duplicateCPF = "clientes_cpf_key"
@@ -31,7 +30,7 @@ const custumerRegister = async (req, res) => {
     ) {
       return res.status(400).json({ message: "CPF já existe." })
     } else
-      return res.status(500).json("Erro interno do servidor")
+      return res.status(500).json({ message: "Erro interno do servidor" })
   }
 
 }
@@ -70,9 +69,54 @@ const datailCustomers = async (req, res) => {
 };
 
 
+const customerUpdate = async (req, res) => {
+
+  const { nome, email, cpf } = req.body
+  const { id } = req.params
+
+  try {
+
+    const customerExist = await knex("clientes").where({ id: id });
+    if (customerExist.length === 0) {
+      return res.status(404).json({ message: "Esse cliente não existe" });
+    }
+
+    const customerUpdated = await knex("clientes")
+      .update({
+        nome,
+        email: email.toLowerCase(),
+        cpf
+      })
+      .where("id", id)
+      .returning(["id", "nome", "email", "cpf"])
+
+    return res.status(200).json(customerUpdated)
+  } catch (error) {
+
+    const duplicateMail = "clientes_email_key"
+    const duplicateCPF = "clientes_cpf_key"
+
+    if (
+      error.message.includes(duplicateMail)
+    ) {
+      return res.status(400).json({ message: "E-mail já existe." })
+    }
+    else if (
+      error.message.includes(duplicateCPF)
+    ) {
+      return res.status(400).json({ message: "CPF já existe." })
+    } else
+      return res.status(500).json({ message: "Erro interno do servidor" })
+
+  }
+
+}
+
+
 module.exports = {
   listCustomers,
   datailCustomers,
-  custumerRegister
+  customerRegister,
+  customerUpdate
 };
 
