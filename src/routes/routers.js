@@ -35,6 +35,7 @@ routes.get("/produto", listProducts);
 routes.get("/produto/:id", detailProduct);
 routes.delete("/produto/:id", deleteProduct);
 
+routes.post("/cliente", validateRequestBody(schemaCustomer), custumerRegister)
 routes.get("/cliente", listCustomers);
 routes.get("/cliente/:id", datailCustomers);
 
@@ -42,3 +43,4 @@ routes.post("/produto", validateRequestBody(schemaProduct), productCreation);
 routes.put("/produto/:id", validateRequestBody(schemaProduct), updateProducts);
 
 module.exports = routes;
+

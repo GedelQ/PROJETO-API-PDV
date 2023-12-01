@@ -6,9 +6,8 @@ const login = async (req, res) => {
   const { email, senha } = req.body;
 
   try {
-    const user = await knex("usuarios")
-      .where({ email: email.toLowerCase() })
-      .first();
+
+    const user = await knex("usuarios").where({ email: email.toLowerCase() }).first();
 
     if (!user) {
       return res.status(404).json("Usuario não encontrado");
