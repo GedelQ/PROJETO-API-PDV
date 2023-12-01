@@ -60,6 +60,7 @@ const userUpdate = async (req, res) => {
     }
     else return res.status(500).json("Erro interno do servidor")
   }
+  
 }
 
 module.exports = {
