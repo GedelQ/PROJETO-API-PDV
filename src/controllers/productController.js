@@ -1,13 +1,12 @@
 const knex = require("../database/connection");
-const categoryExists = require("../services/productService");
+const objectExists = require("../services/productService");
 
 const productCreation = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
 
   try {
-    const exist = await categoryExists(categoria_id);
-
-    if (!exist) return res.status(404).json("Categoria inválida.");
+    const categoryExist = await objectExists("categorias", categoria_id);
+    if (!categoryExist) return res.status(404).json("Categoria inválida.");
 
     const product = await knex("produtos").insert({
       descricao,
@@ -31,14 +30,12 @@ const updateProducts = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const productExist = await knex("produtos").where({ id: id });
-    if (productExist.length === 0) {
+    const productExist = await objectExists("produtos", id);
+    if (!productExist)
       return res.status(404).json("Produto não existe em nosso estoque.");
-    }
 
-    const exist = await categoryExists(categoria_id);
-
-    if (!exist) return res.status(404).json("Categoria inválida.");
+    const categoryExist = await objectExists("categorias", categoria_id);
+    if (!categoryExist) return res.status(404).json("Categoria inválida.");
 
     const product = await knex("produtos")
       .update({
@@ -93,19 +90,12 @@ const listProducts = async (req, res) => {
 };
 
 const detailProduct = async (req, res) => {
-  const productId = req.params.id
-
   try {
-    const productFound = await knex("produtos").where("id", productId).first();
+    const productId = req.params.id;
+    const userId = req.user.id;
 
-    if (!productFound) {
-      return res.status(404).json("Produto não existe em nosso estoque.");
-    }
-
-    return res.status(200).json(productFound)
-  } catch (error) {
-    return res.status(500).json({ message: "Erro interno do servidor." });
-  }
+    const productFound = await knex("produtos").where("");
+  } catch (error) {}
 };
 
 const deleteProduct = async (req, res) => {
@@ -124,7 +114,7 @@ const deleteProduct = async (req, res) => {
 
     deleted;
 
-    return res.status(200).json({ message: "Produto removido" });
+    return res.status(200).json({ message: "Produto removida" });
   } catch (error) {
     return res.status(500).json("Erro interno do servidor");
   }
