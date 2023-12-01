@@ -18,13 +18,9 @@ const userRegister = async (req, res) => {
 
     return res.status(201).json(user)
   } catch (error) {
-    const duplicateMail =
-      'duplicate key value violates unique constraint "usuarios_email_key"'
-    const duplicateMail1 =
-      'duplicar valor da chave viola a restrição de unicidade "usuarios_email_key"'
+    const duplicateMail = "usuarios_email_key"
     if (
-      error.message.includes(duplicateMail) ||
-      error.message.includes(duplicateMail1)
+      error.message.includes(duplicateMail)
     ) {
       return res.status(400).json({ message: "E-mail já existe." })
     } else return res.status(500).json("Erro interno do servidor")
@@ -40,31 +36,30 @@ const userDetail = async (req, res) => {
 
 const userUpdate = async (req, res) => {
 
-	const { nome, email, senha } = req.body
-	const { id } = req.user
+  const { nome, email, senha } = req.body
+  const { id } = req.user
 
-	try {
-		const encryptedPassword = await bcrypt.hash(senha, 10)
+  try {
+    const encryptedPassword = await bcrypt.hash(senha, 10)
 
-		const userUpdated = await knex("usuarios")
-			.update({
-				nome,
-				email: email.toLowerCase(),
-				senha: encryptedPassword
-			})
-			.where("id", id)
-			.returning(["id", "nome", "email"])
+    const userUpdated = await knex("usuarios")
+      .update({
+        nome,
+        email: email.toLowerCase(),
+        senha: encryptedPassword
+      })
+      .where("id", id)
+      .returning(["id", "nome", "email"])
 
-		return res.status(200).json(userUpdated)
-	} catch (error) {
-		const duplicateMail = 'duplicate key value violates unique constraint \"usuarios_email_key\"'
-		const duplicateMail1 = 'duplicar valor da chave viola a restrição da unicidade \"usuarios_email_key\"'
-		if (error.message.includes(duplicateMail) || error.message.includes(duplicateMail1)) {
-			return res.status(400).json({ message: "E-mail já existe." })
-		}
-		else return res.status(500).json("Erro interno do servidor")
+    return res.status(200).json(userUpdated)
+  } catch (error) {
+    const duplicateMail = "usuarios_email_key"
 
-	}
+    if (error.message.includes(duplicateMail)) {
+      return res.status(400).json({ message: "E-mail já existe." })
+    }
+    else return res.status(500).json("Erro interno do servidor")
+  }
 }
 
 module.exports = {
