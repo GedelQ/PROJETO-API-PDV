@@ -93,12 +93,19 @@ const listProducts = async (req, res) => {
 };
 
 const detailProduct = async (req, res) => {
-  try {
-    const productId = req.params.id;
-    const userId = req.user.id;
+  const productId = req.params.id
 
-    const productFound = await knex("produtos").where("");
-  } catch (error) {}
+  try {
+    const productFound = await knex("produtos").where("id", productId).first();
+
+    if (!productFound) {
+      return res.status(404).json("Produto não existe em nosso estoque.");
+    }
+
+    return res.status(200).json(productFound)
+  } catch (error) {
+    return res.status(500).json({ message: "Erro interno do servidor." });
+  }
 };
 
 const deleteProduct = async (req, res) => {
@@ -117,7 +124,7 @@ const deleteProduct = async (req, res) => {
 
     deleted;
 
-    return res.status(200).json({ message: "Produto removida" });
+    return res.status(200).json({ message: "Produto removido" });
   } catch (error) {
     return res.status(500).json("Erro interno do servidor");
   }

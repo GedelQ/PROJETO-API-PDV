@@ -4,7 +4,8 @@
   "description": "![](https://i.imgur.com/xG74tOh.png)",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon ./src/index"
+    "start": "node ./src/index",
+    "dev": "node --watch ./src/index"
   },
   "keywords": [],
   "author": "Miti",
