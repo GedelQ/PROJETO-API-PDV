@@ -1,11 +1,11 @@
 const knex = require("../database/connection");
-const objectExists = require("../services/productService");
+const findById = require("../services/productService");
 
 const productCreation = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
 
   try {
-    const categoryExist = await objectExists("categorias", categoria_id);
+    const categoryExist = await findById("categorias", categoria_id);
     if (!categoryExist) return res.status(404).json("Categoria inválida.");
 
     const product = await knex("produtos").insert({
@@ -30,11 +30,11 @@ const updateProducts = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const productExist = await objectExists("produtos", id);
+    const productExist = await findById("produtos", id);
     if (!productExist)
       return res.status(404).json("Produto não existe em nosso estoque.");
 
-    const categoryExist = await objectExists("categorias", categoria_id);
+    const categoryExist = await findById("categorias", categoria_id);
     if (!categoryExist) return res.status(404).json("Categoria inválida.");
 
     const product = await knex("produtos")
