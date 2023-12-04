@@ -1,13 +1,27 @@
-const knex = require("../database/connection")
-const objectExists = require("../services/productService")
+
+const knex = require("../database/connection");
+const productService= require("../services/productService");
+
 
 const productCreation = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body
 
   try {
-    const categoryExist = await objectExists("categorias", categoria_id)
-    if (!categoryExist) return res.status(404).json({ message: "Categoria inválida." })
 
+    const productExists = await productService.findByName("produtos", descricao);
+
+    if (productExists.id > 0) {
+      const newQtd = Number(productExists.quantidade_estoque) + Number(quantidade_estoque);
+    
+      const addQtdProduct = await knex("produtos").where({ descricao: descricao }).update({quantidade_estoque: newQtd});
+      
+      return res.status(200).json({message:"Produto existente em nosso estoque, quantidade somada no produto."});
+    }
+
+
+    const categoryExist = await productService.findById("categorias", categoria_id);
+    if (!categoryExist) return res.status(404).json("Categoria inválida.");
+    
     const product = await knex("produtos").insert({
       descricao,
       quantidade_estoque,
@@ -30,12 +44,16 @@ const updateProducts = async (req, res) => {
   const { id } = req.params
 
   try {
-    const productExist = await objectExists("produtos", id)
+
+    const productExist = await productService.findById("produtos", id);
+
     if (!productExist)
       return res.status(404).json({ message: "Produto não existe em nosso estoque." })
 
-    const categoryExist = await objectExists("categorias", categoria_id)
-    if (!categoryExist) return res.status(404).json({ message: "Categoria inválida." })
+
+    const categoryExist = await productService.findById("categorias", categoria_id);
+    if (!categoryExist) return res.status(404).json("Categoria inválida.");
+
 
     const product = await knex("produtos")
       .update({
