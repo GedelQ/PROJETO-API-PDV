@@ -6,4 +6,12 @@ findById = async (table, id) => {
   return exists.length === 0 ? false : true;
 };
 
-module.exports = findById;
+findByName = async (table, description) => {
+  const exists = await knex(table).where({ descricao: description }).first();
+
+  if(exists === undefined) return false;
+
+  return exists;
+};
+
+module.exports = { findById, findByName };
