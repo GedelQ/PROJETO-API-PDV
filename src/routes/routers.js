@@ -1,3 +1,4 @@
+
 const express = require("express");
 const { listCategories } = require("../controllers/categorieController");
 const { login } = require("../controllers/loginContoller");
@@ -10,16 +11,12 @@ const schemaProduct = require("../schemas/schemaProduct");
 const productController = require("../controllers/productController");
 const costumerController = require("../controllers/customerController");
 
-const routes = express();
+const routes = express()
 
-routes.get("/categoria", listCategories);
-routes.post("/usuario", validateRequestBody(schemaUser), userController.userRegister);
-routes.post("/login", validateRequestBody(schemaLogin), login);
-
-routes.use(checkUserToken);
 
 routes.get("/usuario", userController.userDetail);
 routes.put("/usuario", validateRequestBody(schemaUser), userController.userUpdate);
+
 
 routes.post("/produto", validateRequestBody(schemaProduct), productController.productCreation);
 routes.get("/produto", productController.listProducts);
@@ -33,3 +30,4 @@ routes.put("/cliente/:id", validateRequestBody(schemaCustomer), costumerControll
 routes.get("/cliente/:id", costumerController.datailCustomers);
 
 module.exports = routes;
+

@@ -1,9 +1,10 @@
-const joi = require("joi");
+const joi = require("joi")
 
 const schemaProduct = joi.object({
   descricao: joi.string().required().messages({
     "any.required": "O campo descricao é obrigatório",
     "string.empty": "O campo descricao é obrigatório",
+    "string.base": "O campo descrição deve ser string"
   }),
   quantidade_estoque: joi.string().required().messages({
     "any.required": "O campo quantidade do estoque é obrigatório",
@@ -17,6 +18,6 @@ const schemaProduct = joi.object({
     "any.required": "O campo categoria_id é obrigatório",
     "string.empty": "O campo categoria_id é obrigatório",
   }),
-});
+})
 
 module.exports = schemaProduct;

@@ -9,7 +9,7 @@ const userRegister = async (req, res) => {
     const encryptedPassword = await bcrypt.hash(senha, 10)
 
     const user = await knex("usuarios")
-      .insert({ nome, email: email.toLowerCase(), senha: encryptedPassword })
+      .insert({ nome: nome.trim(), email: email.toLowerCase(), senha: encryptedPassword })
       .returning(["id", "nome", "email"])
 
     if (!user) {
@@ -60,7 +60,7 @@ const userUpdate = async (req, res) => {
     }
     else return res.status(500).json("Erro interno do servidor")
   }
-  
+
 }
 
 module.exports = {

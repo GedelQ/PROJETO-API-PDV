@@ -1,4 +1,4 @@
-const joi = require("joi")
+const joi = require("joi");
 
 const schemaLogin = joi.object({
   email: joi.string().email().required().messages({
@@ -6,11 +6,15 @@ const schemaLogin = joi.object({
     "any.required": "O campo e-mail é obrigatório",
     "string.empty": "O campo e-mail é obrigatório",
   }),
-  senha: joi.string().required().min(5).messages({
-    "any.required": "O campo senha é obrigatório",
-    "string.empty": "O campo senha é obrigatório",
-    "string.min": "A senha precisa ter 5 caracteres"
-  }),
-})
+  senha: joi
+    .string()
+    .regex(/^(?=.*[@!#$%^&*()/\\])[@!#$%^&*()/\\a-zA-Z0-9]{8,20}$/)
+    .required()
+    .messages({
+      "any.required": "O campo senha é obrigatório",
+      "string.empty": "O campo senha é obrigatório",
+      "string.pattern.base": "A senha precisa ter um formato valído",
+    }),
+});
 
-module.exports = schemaLogin
+module.exports = schemaLogin;
