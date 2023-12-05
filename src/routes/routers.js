@@ -16,7 +16,8 @@ const routes = express()
 
 routes.get("/usuario", userController.userDetail);
 routes.put("/usuario", validateRequestBody(schemaUser), userController.userUpdate);
-
+routes.post("/usuario", validateRequestBody(schemaUser), userController.userRegister);
+routes.post("/login", validateRequestBody(schemaLogin), login);
 
 routes.post("/produto", validateRequestBody(schemaProduct), productController.productCreation);
 routes.get("/produto", productController.listProducts);
