@@ -9,27 +9,61 @@ const { schemaUser, schemaCustomer } = require("../schemas/schemaUser");
 const schemaProduct = require("../schemas/schemaProduct");
 const productController = require("../controllers/productController");
 const costumerController = require("../controllers/customerController");
+const verifyIdIsNumber = require("../middlewares/verifyIdIsNumber");
 
 const routes = express();
 
 routes.get("/categoria", listCategories);
-routes.post("/usuario", validateRequestBody(schemaUser), userController.userRegister);
+routes.post(
+  "/usuario",
+  validateRequestBody(schemaUser),
+  userController.userRegister
+);
 routes.post("/login", validateRequestBody(schemaLogin), login);
 
 routes.use(checkUserToken);
 
 routes.get("/usuario", userController.userDetail);
-routes.put("/usuario", validateRequestBody(schemaUser), userController.userUpdate);
+routes.put(
+  "/usuario",
+  validateRequestBody(schemaUser),
+  userController.userUpdate
+);
 
-routes.post("/produto", validateRequestBody(schemaProduct), productController.productCreation);
+routes.post(
+  "/produto",
+  validateRequestBody(schemaProduct),
+  productController.productCreation
+);
 routes.get("/produto", productController.listProducts);
-routes.put("/produto/:id", validateRequestBody(schemaProduct), productController.updateProducts);
-routes.delete("/produto/:id", productController.deleteProduct);
-routes.get("/produto/:id", productController.detailProduct);
+routes.put(
+  "/produto/:id",
+  verifyIdIsNumber,
+  validateRequestBody(schemaProduct),
+  productController.updateProducts
+);
+routes.delete(
+  "/produto/:id",
+  verifyIdIsNumber,
+  productController.deleteProduct
+);
+routes.get("/produto/:id", verifyIdIsNumber, productController.detailProduct);
 
-routes.post("/cliente", validateRequestBody(schemaCustomer), costumerController.customerRegister);
+routes.post(
+  "/cliente",
+  validateRequestBody(schemaCustomer),
+  costumerController.customerRegister
+);
 routes.get("/cliente", costumerController.listCustomers);
-routes.put("/cliente/:id", validateRequestBody(schemaCustomer), costumerController.customerUpdate);
-routes.get("/cliente/:id", costumerController.datailCustomers);
+routes.put(
+  "/cliente/:id",
+  validateRequestBody(schemaCustomer),
+  costumerController.customerUpdate
+);
+routes.get(
+  "/cliente/:id",
+  verifyIdIsNumber,
+  costumerController.datailCustomers
+);
 
 module.exports = routes;
