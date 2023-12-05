@@ -37,6 +37,41 @@ const schemaCustomer = joi.object({
     "string.max": "O CPF precisa ter no máximo 11 caracteres.",
     "string.base": "O campo CPF deve ser string.",
   }),
+
+  cep: joi.string().min(8).max(8).messages({
+    "string.CEP": "O campo CEP precisa ter um formato válido.",
+    "string.min": "O CEP precisa ter 11 caracteres.",
+    "string.max": "O CEP precisa ter no máximo 8 caracteres.",
+    "string.base": "O campo CEP deve ser string.",
+  }),
+
+  rua: joi.string().messages({
+    "string.rua": "O campo rua precisa ter um formato válido.",
+    "string.base": "O campo rua deve ser string.",
+  }),
+
+  numero: joi.string().min(1).max(10).messages({
+    "string.numero": "O campo numero precisa ter um formato válido.",
+    "string.min": "O numero precisa ter 1 caracteres.",
+    "string.max": "O numero precisa ter no máximo 10 caracteres.",
+    "string.base": "O numero deve ser string.",
+  }),
+
+  bairro: joi.string().messages({
+    "string.bairro": "O campo bairro precisa ter um formato válido.",
+    "string.base": "O campo bairro deve ser string.",
+  }),
+
+  cidade: joi.string().messages({
+    "string.cidade": "O campo cidade precisa ter um formato válido.",
+    "string.base": "O campo cidade deve ser string.",
+  }),
+
+  estado: joi.string().messages({
+    "string.CEP": "O campo CEP precisa ter um formato válido.",
+    "string.base": "O campo CEP deve ser string.",
+  }),
+
 })
 
 module.exports = {

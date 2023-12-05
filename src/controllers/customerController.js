@@ -3,7 +3,9 @@ const isNumber = require("../services/validatorService")
 const validatorService = require("../services/validatorService")
 
 const customerRegister = async (req, res) => {
-  const { nome, email, cpf } = req.body
+
+  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
+
 
   try {
     const validator = isNumber(cpf)
@@ -15,8 +17,10 @@ const customerRegister = async (req, res) => {
     }
 
     const customer = await knex("clientes")
-      .insert({ nome: nome.trim(), email: email.toLowerCase(), cpf })
-      .returning(["id", "nome", "email", "cpf"])
+
+      .insert({ nome: nome.trim(), email: email.toLowerCase(), cpf, cep, rua, numero, bairro, cidade, estado })
+      .returning(["id", "nome", "email", "cpf", "cep", "rua", "numero", "bairro", "cidade", "estado"])
+
 
     if (!customer) {
       return res.status(400).json({ message: "O cliente não foi cadastrado." })

@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS clientes (
     cpf     VARCHAR(15) NOT NULL UNIQUE,
     cep     VARCHAR(10),
     rua     VARCHAR(100),
-    numero  SMALLINT,
+    numero  VARCHAR(10),
     bairro  VARCHAR(50),
     cidade  VARCHAR(50),
     estado  VARCHAR(30)

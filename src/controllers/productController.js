@@ -139,7 +139,7 @@ const deleteProduct = async (req, res) => {
       .first()
 
     if (!checkProductExistence) {
-      return res.status(400).json({ messagem: "Operação não realizada." })
+      return res.status(400).json({ messagem: "Produto não encontrado." })
     }
 
     await knex("produtos").where("id", produtId).del()
