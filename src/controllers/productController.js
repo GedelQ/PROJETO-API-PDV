@@ -8,17 +8,11 @@ const productCreation = async (req, res) => {
     const productExists = await productService.findByName("produtos", descricao)
 
     if (productExists.id > 0) {
-      const newQtd =
-        Number(productExists.quantidade_estoque) + Number(quantidade_estoque)
+      const newQtd = Number(productExists.quantidade_estoque) + Number(quantidade_estoque)
 
-      const addQtdProduct = await knex("produtos")
-        .where({ descricao: descricao })
-        .update({ quantidade_estoque: newQtd })
+      const addQtdProduct = await knex("produtos").where({ descricao: descricao }).update({ quantidade_estoque: newQtd })
 
-      return res.status(200).json({
-        message:
-          "Produto existente em nosso estoque, quantidade somada no produto.",
-      })
+      return res.status(200).json({ message: "Produto existente em nosso estoque, quantidade somada no produto." })
     }
 
     const categoryExist = await productService.findById(
