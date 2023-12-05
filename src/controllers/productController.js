@@ -95,7 +95,6 @@ const listProducts = async (req, res) => {
 
     return res.status(200).json(checkProducts)
   } catch (error) {
-    console.log(error)
     if (
       error.message.includes(`Sintaxe de entrada é inválida para tipo integer.`)
     ) {
