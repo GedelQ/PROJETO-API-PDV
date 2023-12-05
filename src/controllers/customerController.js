@@ -1,9 +1,18 @@
 const knex = require("../database/connection");
+const isNumber = require("../services/validatorService");
+const validatorService = require("../services/validatorService")
 
 const customerRegister = async (req, res) => {
   const { nome, email, cpf } = req.body;
 
   try {
+
+    const validator = isNumber(cpf)
+
+    if (!validator) {
+      return res.status(400).json({ message: "O campo CPF precisa ser um número" });
+    }
+
     const customer = await knex("clientes")
       .insert({ nome: nome.trim(), email: email.toLowerCase(), cpf })
       .returning(["id", "nome", "email", "cpf"]);
