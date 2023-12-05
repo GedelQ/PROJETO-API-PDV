@@ -9,9 +9,7 @@ const customerRegister = async (req, res) => {
     const validator = isNumber(cpf);
 
     if (!validator) {
-      return res
-        .status(400)
-        .json({ message: "O campo CPF precisa ser um número" });
+      return res.status(400).json({ message: "O campo CPF precisa ser um número" });
     }
 
     const customer = await knex("clientes")
@@ -81,9 +79,7 @@ const customerUpdate = async (req, res) => {
     const validator = isNumber(cpf);
 
     if (!validator) {
-      return res
-        .status(400)
-        .json({ message: "O campo CPF precisa ser um número" });
+      return res.status(400).json({ message: "O campo CPF precisa ser um número" });
     }
 
     const customerExist = await knex("clientes").where({ id: id });
