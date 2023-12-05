@@ -5,11 +5,11 @@ const schemaProduct = joi.object({
     "any.required": "O campo descricao é obrigatório",
     "string.empty": "O campo descricao é obrigatório",
   }),
-  quantidade_estoque: joi.string().required().messages({
+  quantidade_estoque: joi.required().messages({
     "any.required": "O campo quantidade do estoque é obrigatório",
     "string.empty": "O campo quantidade do estoque é obrigatório",
   }),
-  valor: joi.string().required().messages({
+  valor: joi.required().messages({
     "any.required": "O campo valor é obrigatório",
     "string.empty": "O campo valor é obrigatório",
   }),
