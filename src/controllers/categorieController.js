@@ -11,7 +11,6 @@ const listCategories = async (req, res) => {
 
     return res.status(200).json(checkCategories)
   } catch (error) {
-    console.log(error)
     return res.status(500).json("Erro interno do servidor")
   }
 }

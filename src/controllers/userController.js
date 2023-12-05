@@ -2,14 +2,17 @@ const knex = require("../database/connection")
 const bcrypt = require("bcrypt")
 
 const userRegister = async (req, res) => {
-
   const { nome, email, senha } = req.body
 
   try {
     const encryptedPassword = await bcrypt.hash(senha, 10)
 
     const user = await knex("usuarios")
-      .insert({ nome, email: email.toLowerCase(), senha: encryptedPassword })
+      .insert({
+        nome: nome.trim(),
+        email: email.toLowerCase(),
+        senha: encryptedPassword,
+      })
       .returning(["id", "nome", "email"])
 
     if (!user) {
@@ -19,13 +22,10 @@ const userRegister = async (req, res) => {
     return res.status(201).json(user)
   } catch (error) {
     const duplicateMail = "usuarios_email_key"
-    if (
-      error.message.includes(duplicateMail)
-    ) {
+    if (error.message.includes(duplicateMail)) {
       return res.status(400).json({ message: "E-mail já existe." })
-    } else return res.status(500).json("Erro interno do servidor")
+    } else return res.status(500).json({ message: "Erro interno do servidor." })
   }
-
 }
 
 const userDetail = async (req, res) => {
@@ -35,7 +35,6 @@ const userDetail = async (req, res) => {
 }
 
 const userUpdate = async (req, res) => {
-
   const { nome, email, senha } = req.body
   const { id } = req.user
 
@@ -46,21 +45,19 @@ const userUpdate = async (req, res) => {
       .update({
         nome,
         email: email.toLowerCase(),
-        senha: encryptedPassword
+        senha: encryptedPassword,
       })
       .where("id", id)
       .returning(["id", "nome", "email"])
 
-    return res.status(200).json(userUpdated)
+    return res.status(200).json(userUpdated[0])
   } catch (error) {
     const duplicateMail = "usuarios_email_key"
 
     if (error.message.includes(duplicateMail)) {
       return res.status(400).json({ message: "E-mail já existe." })
-    }
-    else return res.status(500).json("Erro interno do servidor")
+    } else return res.status(500).json({ message: "Erro interno do servidor." })
   }
-  
 }
 
 module.exports = {
