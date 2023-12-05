@@ -1,16 +1,17 @@
 const knex = require("../database/connection");
 const isNumber = require("../services/validatorService");
-const validatorService = require("../services/validatorService")
+const validatorService = require("../services/validatorService");
 
 const customerRegister = async (req, res) => {
   const { nome, email, cpf } = req.body;
 
   try {
-
-    const validator = isNumber(cpf)
+    const validator = isNumber(cpf);
 
     if (!validator) {
-      return res.status(400).json({ message: "O campo CPF precisa ser um número" });
+      return res
+        .status(400)
+        .json({ message: "O campo CPF precisa ser um número" });
     }
 
     const customer = await knex("clientes")
@@ -54,6 +55,12 @@ const datailCustomers = async (req, res) => {
   const { id } = req.params;
 
   try {
+    const verifyIdNumber = validatorService(id);
+    if (!verifyIdNumber) {
+      return res.status(404).json({
+        message: "ID inválido, verifique se foi utilizado números inteiros.",
+      });
+    }
     const checkCostumer = await knex("clientes").where({ id }).first();
     if (!checkCostumer) {
       return res.status(404).json({ message: "Cliente não encontrado." });
