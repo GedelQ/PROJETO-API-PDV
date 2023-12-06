@@ -1,5 +1,6 @@
 const knex = require("../database/connection")
 const isNumber = require("../services/validatorService")
+const { findById } = require("../services/productService")
 
 const customerRegister = async (req, res) => {
   const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } =
@@ -58,10 +59,10 @@ const customerRegister = async (req, res) => {
 const listCustomers = async (req, res) => {
   try {
     const checkCostumer = await knex("clientes")
-    if (!checkCostumer) {
+    if (checkCostumer.length < 1) {
       return res
         .status(404)
-        .json({ message: "Sem clientes para serem listas." })
+        .json({ message: "Sem clientes para serem listos." })
     }
 
     return res.status(200).json(checkCostumer)
@@ -74,12 +75,15 @@ const datailCustomers = async (req, res) => {
   const { id } = req.params
 
   try {
-    const checkCostumer = await knex("clientes").where({ id }).first()
-    if (!checkCostumer) {
+    const customerExist = await findById("clientes", id)
+
+    if (!customerExist) {
       return res.status(404).json({ message: "Cliente não encontrado." })
     }
 
-    return res.status(200).json(checkCostumer)
+    const costumer = await knex("clientes").where({ id }).first()
+
+    return res.status(200).json(costumer)
   } catch (error) {
     return res.status(500).json({ message: "Erro interno do servidor" })
   }
