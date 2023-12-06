@@ -99,7 +99,7 @@ const customerUpdate = async (req, res) => {
       .update({ nome: nome.trim(), email: email.toLowerCase(), cpf, cep, rua, numero, bairro, cidade, estado })
       .where("id", id)
 
-      .returning(["id", "nome", "email", "cpf", "cep", "rua", "numero", "bairro", "cidade", "estado"]);
+      .returning(["id", "nome", "email", "cpf", "cep", "rua", "numero", "bairro", "cidade", "estado"])
 
 
     return res.status(200).json(customerUpdated)
