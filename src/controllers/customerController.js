@@ -6,29 +6,25 @@ const customerRegister = async (req, res) => {
 
   const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
 
-
   try {
     const validator = isNumber(cpf)
 
     if (!validator) {
-
-      return res
-        .status(400)
-        .json({ message: "O campo CPF precisa ser um número" })
-
-
+      return res.status(400).json({ message: "O campo CPF precisa ser um número" })
+    }
     const customer = await knex("clientes")
 
       .insert({ nome: nome.trim(), email: email.toLowerCase(), cpf, cep, rua, numero, bairro, cidade, estado })
       .returning(["id", "nome", "email", "cpf", "cep", "rua", "numero", "bairro", "cidade", "estado"])
-
 
     if (!customer) {
       return res.status(400).json({ message: "O cliente não foi cadastrado." })
     }
 
     return res.status(201).json(customer)
-  } catch (error) {
+  }
+
+  catch (error) {
     const duplicateMail = "clientes_email_key"
     const duplicateCPF = "clientes_cpf_key"
 
@@ -39,6 +35,7 @@ const customerRegister = async (req, res) => {
     } else return res.status(500).json({ message: "Erro interno do servidor." })
   }
 }
+
 
 const listCustomers = async (req, res) => {
   try {
