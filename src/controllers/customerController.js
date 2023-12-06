@@ -17,7 +17,7 @@ const customerRegister = async (req, res) => {
       .insert({ nome: nome.trim(), email: email.toLowerCase(), cpf, cep, rua, numero, bairro, cidade, estado })
       .returning(["id", "nome", "email", "cpf", "cep", "rua", "numero", "bairro", "cidade", "estado"])
 
-    if (!customer) {
+    if (customer.lenth <1) {
       return res.status(400).json({ message: "O cliente não foi cadastrado." })
     }
 
