@@ -1,5 +1,6 @@
 const knex = require("../database/connection")
 const productService = require("../services/productService")
+const validatorService = require("../services/validatorService")
 
 const productCreation = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body
@@ -10,9 +11,14 @@ const productCreation = async (req, res) => {
     if (productExists.id > 0) {
       const newQtd = productExists.quantidade_estoque + quantidade_estoque
 
-      const addQtdProduct = await knex("produtos").where({ descricao: descricao }).update({ quantidade_estoque: newQtd })
+      const addQtdProduct = await knex("produtos")
+        .where({ descricao: descricao })
+        .update({ quantidade_estoque: newQtd })
 
-      return res.status(200).json({ message: "Produto existente em nosso estoque, quantidade somada no produto." })
+      return res.status(200).json({
+        message:
+          "Produto existente em nosso estoque, quantidade somada no produto.",
+      })
     }
 
     const categoryExist = await productService.findById(
@@ -77,7 +83,7 @@ const listProducts = async (req, res) => {
     let checkProducts
 
     if (!categoria) checkProducts = await knex("produtos")
-    else if (typeof categoria === typeof "String")
+    else if (typeof categoria !== "String")
       checkProducts = await knex("produtos").where("categoria_id", categoria)
     else
       checkProducts = await knex("produtos").whereIn("categoria_id", [
