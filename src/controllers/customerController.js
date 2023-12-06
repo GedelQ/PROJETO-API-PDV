@@ -11,10 +11,11 @@ const customerRegister = async (req, res) => {
     const validator = isNumber(cpf)
 
     if (!validator) {
+
       return res
         .status(400)
         .json({ message: "O campo CPF precisa ser um número" })
-    }
+
 
     const customer = await knex("clientes")
 
@@ -76,23 +77,30 @@ const datailCustomers = async (req, res) => {
 }
 
 const customerUpdate = async (req, res) => {
-  const { nome, email, cpf } = req.body
+
+  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body
   const { id } = req.params
 
   try {
+
+    const validator = isNumber(cpf)
+
+    if (!validator) {
+      return res.status(400).json({ message: "O campo CPF precisa ser um número" })
+    }
+
     const customerExist = await knex("clientes").where({ id: id })
+
     if (customerExist.length === 0) {
       return res.status(404).json({ message: "Esse cliente não existe." })
     }
 
     const customerUpdated = await knex("clientes")
-      .update({
-        nome: nome.trim(),
-        email: email.toLowerCase(),
-        cpf,
-      })
+      .update({ nome: nome.trim(), email: email.toLowerCase(), cpf, cep, rua, numero, bairro, cidade, estado })
       .where("id", id)
-      .returning(["id", "nome", "email", "cpf"])
+
+      .returning(["id", "nome", "email", "cpf", "cep", "rua", "numero", "bairro", "cidade", "estado"])
+
 
     return res.status(200).json(customerUpdated)
   } catch (error) {
