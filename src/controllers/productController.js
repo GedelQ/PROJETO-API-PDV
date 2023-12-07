@@ -71,7 +71,7 @@ const updateProducts = async (req, res) => {
       })
       .where({ id: id })
 
-    return res.status(201).json({ message: "Produto atualizado com sucesso!" })
+    return res.status(200)
   } catch (error) {
     return res.status(500).json({ message: "Erro interno do servidor." })
   }
