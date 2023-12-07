@@ -1,4 +1,4 @@
-const { findByClient } = require("../services/productService")
+const orderService = require("../services/orderService")
 
 const listOrders = async (req, res) => {
     try {
@@ -6,16 +6,12 @@ const listOrders = async (req, res) => {
 
         const orders = await findByClient(cliente_id)
 
-        console.log(orders);
-
         if (orders.length === 0) {
-            throw new Error({ message: "Invalid" })
+            throw ({ message: "Invalid" })
         }
 
         return res.status(200).json(orders)
     } catch (error) {
-
-        console.log(error.message);
         if (
             error.message.toLowerCase().includes(`inválida`) || error.message.toLowerCase().includes(`invalid`)
         ) {

@@ -31,13 +31,4 @@ findByCategory = async (categoria_id) => {
   return products
 }
 
-findByClient = async (cliente_id) => {
-
-  const orders = await knex("pedidos")
-    .join("pedido_produtos", "pedidos.id", "pedidos_produtos.pedido_id")
-    .where("cliente_id", cliente_id)
-
-  return orders
-}
-
-module.exports = { findById, findByName, findByCategory, findByClient }
+module.exports = { findById, findByName, findByCategory }
