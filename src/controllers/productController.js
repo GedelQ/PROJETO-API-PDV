@@ -32,7 +32,7 @@ const productCreation = async (req, res) => {
       quantidade_estoque,
       valor,
       categoria_id,
-    })
+    }).returning('*')
 
     if (!product) {
       return res.status(400).json({ message: "O produto não foi cadastrado." })
