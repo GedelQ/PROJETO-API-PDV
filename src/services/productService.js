@@ -14,4 +14,21 @@ findByName = async (table, description) => {
   return exists
 }
 
-module.exports = { findById, findByName }
+findByCategory = async (categoria_id) => {
+
+  let products
+
+  if (!categoria_id) {
+    products = await knex("produtos")
+
+  } else if (typeof categoria_id !== "String") {
+    products = await knex("produtos").where("categoria_id", categoria_id)
+  }
+  else {
+    products = await knex("produtos").whereIn("categoria_id", [...categoria_id])
+  }
+
+  return products
+}
+
+module.exports = { findById, findByName, findByCategory }
