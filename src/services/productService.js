@@ -31,4 +31,9 @@ findByCategory = async (categoria_id) => {
   return products
 }
 
-module.exports = { findById, findByName, findByCategory }
+findByClient = async (cliente_id) => {
+
+
+}
+
+module.exports = { findById, findByName, findByCategory, findByClient }
