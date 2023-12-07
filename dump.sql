@@ -60,5 +60,5 @@ CREATE TABLE IF NOT EXISTS pedido_produtos (
     pedido_id               INT NOT NULL REFERENCES pedidos(id),
     produto_id              INT NOT NULL REFERENCES produtos(id),
     quantidade_produto      INT NOT NULL,
-    valor_produto           INT NOT NULL
+    valor_produto           INT NOT NULL REFERENCES produtos(valor)
 );
