@@ -1,3 +1,4 @@
+const { json } = require("express")
 const knex = require("../database/connection")
 const productService = require("../services/productService")
 const validatorService = require("../services/validatorService")
@@ -81,10 +82,10 @@ const listProducts = async (req, res) => {
   try {
     const { categoria_id } = req.query
 
-    const products = findByCategory(categoria_id)
+    const products = await findByCategory(categoria_id)
 
     if (products.length === 0) {
-      throw new Error({ message: "Invalid" })
+      throw ({ message: "Invalid" })
     }
 
     return res.status(200).json(products)
