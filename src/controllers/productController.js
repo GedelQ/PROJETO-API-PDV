@@ -9,7 +9,7 @@ const productCreation = async (req, res) => {
     const productExists = await productService.findByName("produtos", descricao)
 
     if (productExists.id > 0) {
-      const newQtd = productExists.quantidade_estoque + quantidade_estoque
+      const newQtd = Number(productExists.quantidade_estoque) + Number(quantidade_estoque)
 
       const addQtdProduct = await knex("produtos")
         .where({ descricao: descricao })
