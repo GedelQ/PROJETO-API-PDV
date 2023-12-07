@@ -84,25 +84,22 @@ const listProducts = async (req, res) => {
     const products = findByCategory(categoria_id);
 
     if (products.length === 0) {
-      throw new Error({ message: "Categoria Invalida." })
+      throw new Error({ message: "Invalid" })
     }
+
+    let teste = "123"
 
     return res.status(200).json(products)
   } catch (error) {
     if (
-      error.message.includes(`inválida`) || error.message.includes(`invalid`)
+      error.message.toLowerCase().includes(`inválida`) || error.message.toLowerCase().includes(`invalid`)
     ) {
       return res.status(400).json({
         message:
-          "Uma ou mais categorias são inválidas. Por favor verifique se esta inserindo apenas números."
+          "Uma ou mais categorias são inválidas. Por favor verifique se esta inserindo apenas números e se a categoria solicitada existe."
       })
     }
-    if (error.message === "Categoria Invalida") {
-      return res.status(400).json({
-        message:
-          "Não existe nenhuma categoria com o(s) valor(es) informado(s), por favor verifique a(s) categoria(s) solicitada(s)."
-      })
-    }
+
     return res.status(500).json({ message: "Erro interno do servidor." })
   }
 }
