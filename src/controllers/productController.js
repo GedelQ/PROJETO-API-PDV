@@ -81,13 +81,11 @@ const listProducts = async (req, res) => {
   try {
     const { categoria_id } = req.query
 
-    const products = findByCategory(categoria_id);
+    const products = findByCategory(categoria_id)
 
     if (products.length === 0) {
       throw new Error({ message: "Invalid" })
     }
-
-    let teste = "123"
 
     return res.status(200).json(products)
   } catch (error) {
