@@ -1,26 +1,27 @@
 const { findByClient } = require("../services/productService")
 
-const listProducts = async (req, res) => {
+const listOrders = async (req, res) => {
     try {
         const { cliente_id } = req.query
 
-        const orders = findByClient("pedidos").leftjoin("pedido_produtos").where("cliente_id", cliente_id)
+        const orders = await findByClient(cliente_id)
 
         console.log(orders);
-
 
         if (orders.length === 0) {
             throw new Error({ message: "Invalid" })
         }
 
-        // return res.status(200).json(orders)
+        return res.status(200).json(orders)
     } catch (error) {
+
+        console.log(error.message);
         if (
             error.message.toLowerCase().includes(`inválida`) || error.message.toLowerCase().includes(`invalid`)
         ) {
             return res.status(400).json({
                 message:
-                    "Uma ou mais categorias são inválidas. Por favor verifique se esta inserindo apenas números e se a(s) categoria(s) solicitada existe."
+                    "Cliente_id inválido. Por favor verifique se esta inserindo apenas números e se o Cliente solicitado existe."
             })
         }
 
@@ -30,5 +31,5 @@ const listProducts = async (req, res) => {
 
 
 module.exports = {
-    listProducts
+    listOrders
 }
