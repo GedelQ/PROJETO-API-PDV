@@ -38,7 +38,7 @@ const productCreation = async (req, res) => {
       return res.status(400).json({ message: "O produto não foi cadastrado." })
     }
 
-    return res.status(201).json(product)
+    return res.status(201).json(product[0])
   } catch (error) {
     return res.status(500).json({ message: "Erro interno do servidor." })
   }
