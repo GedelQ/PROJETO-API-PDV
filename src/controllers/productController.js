@@ -118,11 +118,11 @@ const detailProduct = async (req, res) => {
     const productId = req.params.id
 
     const productFound = await knex("produtos")
-      .where({ id: productId })
+      .where("id", productId)
       .returning("*")
 
-    if (productFound.length < 1) {
-      return res.status(400).json({ message: "Produto não encontrado." })
+    if (!productFound) {
+      return res.status(404).json({ message: "Produto não encontrado." })
     }
     return res.status(200).json(productFound[0])
   } catch (error) {
@@ -131,18 +131,18 @@ const detailProduct = async (req, res) => {
 }
 
 const deleteProduct = async (req, res) => {
-  const produtId = req.params.id
-
   try {
-    const checkProductExistence = await knex("produtos")
-      .where("id", produtId)
+    const productId = req.params.id
+
+    const productFound = await knex("produtos")
+      .where("id", productId)
       .first()
 
-    if (!checkProductExistence) {
-      return res.status(400).json({ messagem: "Produto não encontrado." })
+    if (!productFound) {
+      return res.status(404).json({ messagem: "Produto não encontrado." })
     }
 
-    await knex("produtos").where("id", produtId).del()
+    await knex("produtos").where("id", productId).del()
 
     return res.status(200).json({ message: "Produto removido." })
   } catch (error) {
