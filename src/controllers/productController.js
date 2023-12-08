@@ -1,5 +1,6 @@
 const knex = require("../database/connection")
 const productService = require("../services/productService")
+const isNumber = require("../services/validatorService")
 const validatorService = require("../services/validatorService")
 
 const productCreation = async (req, res) => {
@@ -119,12 +120,12 @@ const detailProduct = async (req, res) => {
 
     const productFound = await knex("produtos")
       .where("id", productId)
-      .returning("*")
+      .first()
 
     if (!productFound) {
       return res.status(404).json({ message: "Produto não encontrado." })
     }
-    return res.status(200).json(productFound[0])
+    return res.status(200).json(productFound)
   } catch (error) {
     return res.status(500).json({ message: "Erro interno do servidor." })
   }
@@ -137,12 +138,11 @@ const deleteProduct = async (req, res) => {
     const productFound = await knex("produtos")
       .where("id", productId)
       .first()
+      .del()
 
     if (!productFound) {
       return res.status(404).json({ messagem: "Produto não encontrado." })
     }
-
-    await knex("produtos").where("id", productId).del()
 
     return res.status(200).json({ message: "Produto removido." })
   } catch (error) {
