@@ -9,7 +9,7 @@ const productCreation = async (req, res) => {
     const productExists = await productService.findByName("produtos", descricao)
 
     if (productExists.id > 0) {
-      const newQtd = productExists.quantidade_estoque + quantidade_estoque
+      const newQtd = Number(productExists.quantidade_estoque) + Number(quantidade_estoque)
 
       const addQtdProduct = await knex("produtos")
         .where({ descricao: descricao })
@@ -32,13 +32,13 @@ const productCreation = async (req, res) => {
       quantidade_estoque,
       valor,
       categoria_id,
-    })
+    }).returning('*')
 
     if (!product) {
       return res.status(400).json({ message: "O produto não foi cadastrado." })
     }
 
-    return res.status(201).json({ message: "Produto cadastrado com sucesso!" })
+    return res.status(201).json(product[0])
   } catch (error) {
     return res.status(500).json({ message: "Erro interno do servidor." })
   }
@@ -71,7 +71,7 @@ const updateProducts = async (req, res) => {
       })
       .where({ id: id })
 
-    return res.status(201).json({ message: "Produto atualizado com sucesso!" })
+    return res.status(204)
   } catch (error) {
     return res.status(500).json({ message: "Erro interno do servidor." })
   }
