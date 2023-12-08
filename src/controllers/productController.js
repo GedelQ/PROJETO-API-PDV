@@ -78,36 +78,25 @@ const updateProducts = async (req, res) => {
 
 const listProducts = async (req, res) => {
   try {
-    const { categoria } = req.query
-    let checkProducts
+    const { categoria_id } = req.query
 
-    if (!categoria) checkProducts = await knex("produtos")
-    else if (typeof categoria !== "String")
-      checkProducts = await knex("produtos").where("categoria_id", categoria)
-    else
-      checkProducts = await knex("produtos").whereIn("categoria_id", [
-        ...categoria,
-      ])
+    const products = findByCategory(categoria_id)
 
-    if (checkProducts.length === 0)
-      throw new Error({ message: "Categoria Invalida." })
+    if (products.length === 0) {
+      throw new Error({ message: "Invalid" })
+    }
 
-    return res.status(200).json(checkProducts)
+    return res.status(200).json(products)
   } catch (error) {
     if (
-      error.message.includes(`Sintaxe de entrada é inválida para tipo integer.`)
+      error.message.toLowerCase().includes(`inválida`) || error.message.toLowerCase().includes(`invalid`)
     ) {
       return res.status(400).json({
         message:
-          "Uma ou mais categorias são inválidas. Por favor verifique se esta inserindo apenas números.",
+          "Uma ou mais categorias são inválidas. Por favor verifique se esta inserindo apenas números e se a categoria solicitada existe."
       })
     }
-    if (error.message === "Categoria Invalida") {
-      return res.status(400).json({
-        message:
-          "Não existe nenhuma categoria com o(s) valor(es) informado(s), por favor verifique a(s) categoria(s) solicitada(s).",
-      })
-    }
+
     return res.status(500).json({ message: "Erro interno do servidor." })
   }
 }
