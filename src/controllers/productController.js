@@ -1,6 +1,5 @@
 const knex = require("../database/connection")
 const productService = require("../services/productService")
-const validatorService = require("../services/validatorService")
 
 const productCreation = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body
