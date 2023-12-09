@@ -4,7 +4,7 @@ const validatorService = require("../services/validatorService")
 
 const customerRegister = async (req, res) => {
 
-  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
+  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body
 
 
   try {
@@ -16,7 +16,7 @@ const customerRegister = async (req, res) => {
         .status(400)
         .json({ message: "O campo CPF precisa ser um número" })
 
-
+    }
     const customer = await knex("clientes")
 
       .insert({ nome: nome.trim(), email: email.toLowerCase(), cpf, cep, rua, numero, bairro, cidade, estado })

@@ -4,9 +4,10 @@ const verifyIdIsNumber = async (req, res, next) => {
   const { id } = req.params
   try {
     const verifyIdNumber = validatorService(id)
-    if (!verifyIdNumber) {
+    if (!verifyIdNumber || id < 0) {
       return res.status(404).json({
-        message: "ID inválido, verifique se foi utilizado números inteiros.",
+        message:
+          "ID inválido, verifique se foi utilizado números inteiros e positivos.",
       })
     }
     next()
