@@ -10,6 +10,7 @@ const schemaProduct = require("../schemas/schemaProduct")
 const productController = require("../controllers/productController")
 const costumerController = require("../controllers/customerController")
 const verifyIdIsNumber = require("../middlewares/verifyIdIsNumber")
+const orderController = require("../controllers/orderController")
 
 const routes = express()
 
@@ -57,5 +58,7 @@ routes.put(
   costumerController.customerUpdate
 )
 routes.get("/cliente/:id", verifyIdIsNumber, costumerController.datailCustomers)
+
+routes.get("/pedido", orderController.listOrders)
 
 module.exports = routes
