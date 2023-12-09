@@ -7,7 +7,7 @@ const customerRegister = async (req, res) => {
 
 
   try {
-    cconst validator = isNumber(cpf)
+    const validator = isNumber(cpf)
 
     if (!validator) {
 
