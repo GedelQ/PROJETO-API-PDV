@@ -27,7 +27,7 @@ const customerRegister = async (req, res) => {
       return res.status(400).json({ message: "O cliente não foi cadastrado." })
     }
 
-    return res.status(201).json(customer)
+    return res.status(201).json(customer[0])
   } catch (error) {
     const duplicateMail = "clientes_email_key"
     const duplicateCPF = "clientes_cpf_key"
