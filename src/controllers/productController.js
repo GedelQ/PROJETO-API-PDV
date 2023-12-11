@@ -1,9 +1,11 @@
 const { json } = require("express")
 const knex = require("../database/connection")
 const productService = require("../services/productService")
+const awsService = require('../services/s3Service')
 
 const productCreation = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body
+  const  produto_imagem  = req.file
 
   try {
     const productExists = await productService.findByName("produtos", descricao)
@@ -25,13 +27,17 @@ const productCreation = async (req, res) => {
       "categorias",
       categoria_id
     )
+
     if (!categoryExist) return res.status(404).json("Categoria inválida.")
 
-    const product = await knex("produtos").insert({
+    const arquivo = await awsService.uploadFile(`imagens/${produto_imagem.originalname}`, produto_imagem.buffer, produto_imagem.mimetype)
+
+     const product = await knex("produtos").insert({
       descricao,
       quantidade_estoque,
       valor,
       categoria_id,
+      produto_imagem: arquivo.url
     }).returning('*')
 
     if (!product) {
@@ -47,6 +53,8 @@ const productCreation = async (req, res) => {
 const updateProducts = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body
   const { id } = req.params
+  const produto_imagem = req.file
+
 
   try {
     const productExist = await productService.findById("produtos", id)
@@ -62,16 +70,19 @@ const updateProducts = async (req, res) => {
     )
     if (!categoryExist) return res.status(404).json("Categoria inválida.")
 
-    await knex("produtos")
+    const arquivo = await awsService.uploadFile(`imagens/${produto_imagem.originalname}`, produto_imagem.buffer, produto_imagem.mimetype)
+
+    const product = await knex("produtos")
       .update({
         descricao,
         quantidade_estoque,
         valor,
         categoria_id,
+        produto_imagem: arquivo.url
       })
-      .where({ id: id })
+      .where({ id: id }).returning('*')
 
-    return res.status(204)
+      return res.status(200).json(product[0])
   } catch (error) {
     return res.status(500).json({ message: "Erro interno do servidor." })
   }
