@@ -47,3 +47,18 @@ CREATE TABLE IF NOT EXISTS clientes (
     cidade  VARCHAR(50),
     estado  VARCHAR(30)
 );
+
+CREATE TABLE IF NOT EXISTS pedidos (
+    id                  SERIAL PRIMARY KEY,
+    cliente_id          INT NOT NULL REFERENCES clientes(id),
+    observacao          VARCHAR(150) NOT NULL,
+    valor_total         INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS pedido_produtos (
+    id                      SERIAL PRIMARY KEY,
+    pedido_id               INT NOT NULL REFERENCES pedidos(id),
+    produto_id              INT NOT NULL REFERENCES produtos(id),
+    quantidade_produto      INT NOT NULL,
+    valor_produto           INT NOT NULL
+);
