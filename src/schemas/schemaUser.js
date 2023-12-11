@@ -38,38 +38,47 @@ const schemaCustomer = joi.object({
     "string.base": "O campo CPF deve ser string.",
   }),
 
-  cep: joi.string().min(8).max(8).messages({
+  cep: joi.string().trim().min(8).max(8).messages({
     "string.CEP": "O campo CEP precisa ter um formato válido.",
     "string.min": "O CEP precisa ter 11 caracteres.",
     "string.max": "O CEP precisa ter no máximo 8 caracteres.",
     "string.base": "O campo CEP deve ser string.",
+    "string.empty": "O campo CEP não pode ser vazio."
   }),
 
-  rua: joi.string().messages({
+  rua: joi.string().trim().max(50).messages({
     "string.rua": "O campo rua precisa ter um formato válido.",
     "string.base": "O campo rua deve ser string.",
+    "string.empty": "O campo rua não pode ser vazio.",
+    "string.max": "O campo rua precisa ter no máximo 50 caracteres.",
   }),
 
-  numero: joi.string().min(1).max(10).messages({
-    "string.numero": "O campo numero precisa ter um formato válido.",
-    "string.min": "O numero precisa ter 1 caracteres.",
-    "string.max": "O numero precisa ter no máximo 10 caracteres.",
-    "string.base": "O numero deve ser string.",
+  numero: joi.string().trim().max(10).messages({
+    "string.numero": "O campo número precisa ter um formato válido.",
+    "string.max": "O número precisa ter no máximo 10 caracteres.",
+    "string.base": "O número deve ser string.",
+    "string.empty": "O campo número não pode ser vazio."
   }),
 
-  bairro: joi.string().messages({
+  bairro: joi.string().trim().max(50).messages({
     "string.bairro": "O campo bairro precisa ter um formato válido.",
     "string.base": "O campo bairro deve ser string.",
+    "string.empty": "O campo bairro não pode ser vazio.",
+    "string.max": "O campo bairro precisa ter no máximo 50 caracteres.",
   }),
 
-  cidade: joi.string().messages({
+  cidade: joi.string().trim().max(50).messages({
     "string.cidade": "O campo cidade precisa ter um formato válido.",
     "string.base": "O campo cidade deve ser string.",
+    "string.empty": "O campo cidade não pode ser vazio.",
+    "string.max": "O campo rua precisa ter no máximo 50 caracteres.",
   }),
 
-  estado: joi.string().messages({
-    "string.CEP": "O campo CEP precisa ter um formato válido.",
-    "string.base": "O campo CEP deve ser string.",
+  estado: joi.string().trim().max(30).messages({
+    "string.CEP": "O campo estado precisa ter um formato válido.",
+    "string.base": "O campo estado deve ser string.",
+    "string.empty": "O campo estado não pode ser vazio.",
+    "string.max": "O campo estado precisa ter no máximo 30 caracteres.",
   }),
 
 })
