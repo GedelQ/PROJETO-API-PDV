@@ -40,7 +40,7 @@ const schemaCustomer = joi.object({
 
   cep: joi.string().trim().min(8).max(8).messages({
     "string.CEP": "O campo CEP precisa ter um formato válido.",
-    "string.min": "O CEP precisa ter 11 caracteres.",
+    "string.min": "O CEP precisa ter 8 caracteres.",
     "string.max": "O CEP precisa ter no máximo 8 caracteres.",
     "string.base": "O campo CEP deve ser string.",
     "string.empty": "O campo CEP não pode ser vazio."
