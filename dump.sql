@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS produtos (
     descricao           VARCHAR(100) NOT NULL,
     quantidade_estoque  INT NOT NULL,
     valor               INT NOT NULL,
-    categoria_id        SMALLINT NOT NULL REFERENCES categorias(id)
+    categoria_id        SMALLINT NOT NULL REFERENCES categorias(id),
+    produto_imagem      VARCHAR(150)
 );
 
 CREATE TABLE IF NOT EXISTS clientes (
