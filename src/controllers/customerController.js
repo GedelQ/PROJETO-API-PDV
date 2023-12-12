@@ -1,9 +1,8 @@
 const knex = require("../database/connection")
 const isNumber = require("../services/validatorService")
-const validatorService = require("../services/validatorService")
+const { findById } = require("../services/productService")
 
 const customerRegister = async (req, res) => {
-
   const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
 
 
@@ -16,7 +15,7 @@ const customerRegister = async (req, res) => {
         .status(400)
         .json({ message: "O campo CPF precisa ser um número" })
 
-
+    }
     const customer = await knex("clientes")
 
       .insert({ nome: nome.trim(), email: email.toLowerCase(), cpf, cep, rua, numero, bairro, cidade, estado })
@@ -28,7 +27,9 @@ const customerRegister = async (req, res) => {
     }
 
     return res.status(201).json(customer)
-  } catch (error) {
+  }
+
+  catch (error) {
     const duplicateMail = "clientes_email_key"
     const duplicateCPF = "clientes_cpf_key"
 
@@ -40,13 +41,14 @@ const customerRegister = async (req, res) => {
   }
 }
 
+
 const listCustomers = async (req, res) => {
   try {
     const checkCostumer = await knex("clientes")
-    if (!checkCostumer) {
+    if (checkCostumer.length < 1) {
       return res
         .status(404)
-        .json({ message: "Sem clientes para serem listas." })
+        .json({ message: "Sem clientes para serem listos." })
     }
 
     return res.status(200).json(checkCostumer)
@@ -59,34 +61,32 @@ const datailCustomers = async (req, res) => {
   const { id } = req.params
 
   try {
-    const verifyIdNumber = validatorService(id)
-    if (!verifyIdNumber) {
-      return res.status(404).json({
-        message: "ID inválido, verifique se foi utilizado números inteiros.",
-      })
-    }
-    const checkCostumer = await knex("clientes").where({ id }).first()
-    if (!checkCostumer) {
+    const customerExist = await findById("clientes", id)
+
+    if (!customerExist) {
       return res.status(404).json({ message: "Cliente não encontrado." })
     }
 
-    return res.status(200).json(checkCostumer)
+    const costumer = await knex("clientes").where({ id }).first()
+
+    return res.status(200).json(costumer)
   } catch (error) {
     return res.status(500).json({ message: "Erro interno do servidor" })
   }
 }
 
 const customerUpdate = async (req, res) => {
-
-  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body
+  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } =
+    req.body
   const { id } = req.params
 
   try {
-
     const validator = isNumber(cpf)
 
     if (!validator) {
-      return res.status(400).json({ message: "O campo CPF precisa ser um número" })
+      return res
+        .status(400)
+        .json({ message: "O campo CPF precisa ser um número" })
     }
 
     const customerExist = await knex("clientes").where({ id: id })
@@ -96,11 +96,31 @@ const customerUpdate = async (req, res) => {
     }
 
     const customerUpdated = await knex("clientes")
-      .update({ nome: nome.trim(), email: email.toLowerCase(), cpf, cep, rua, numero, bairro, cidade, estado })
+      .update({
+        nome: nome.trim(),
+        email: email.toLowerCase(),
+        cpf,
+        cep,
+        rua,
+        numero,
+        bairro,
+        cidade,
+        estado,
+      })
       .where("id", id)
 
-      .returning(["id", "nome", "email", "cpf", "cep", "rua", "numero", "bairro", "cidade", "estado"])
-
+      .returning([
+        "id",
+        "nome",
+        "email",
+        "cpf",
+        "cep",
+        "rua",
+        "numero",
+        "bairro",
+        "cidade",
+        "estado",
+      ])
 
     return res.status(200).json(customerUpdated)
   } catch (error) {
