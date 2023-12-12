@@ -62,4 +62,6 @@ routes.get("/cliente/:id", verifyIdIsNumber, costumerController.datailCustomers)
 
 routes.get("/pedido", orderController.listOrders)
 
+routes.post("/pedido", orderController.orders)
+
 module.exports = routes

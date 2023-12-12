@@ -1,4 +1,6 @@
 const orderService = require("../services/orderService")
+const knex = require("../database/connection")
+const { log } = require("console")
 
 const listOrders = async (req, res) => {
     try {
@@ -25,7 +27,55 @@ const listOrders = async (req, res) => {
     }
 }
 
+const orders = async (req, res) => {
+    const { cliente_id, pedido_produtos, observacao } = req.body
+    let total = 0
+    try {
+        const customerExist = await knex("clientes").where({ id: cliente_id })
 
+        if (customerExist.length === 0) {
+            return res.status(404).json({ message: "Esse cliente não existe." })
+        }
+        for (let item of pedido_produtos) {
+
+            const productExist = await knex("produtos").where({ id: item.produto_id })
+
+            if (productExist.length === 0) {
+                return res.status(404).json({ "messagem": `O produto com id ${item.produto_id} não existe` })
+            }
+
+            total += item.valor_produto
+        }
+
+        const pedidos = await knex("pedidos")
+            .insert({
+                cliente_id,
+                observacao,
+                valor_total: total
+            }).returning(["id"])
+
+        const pedidoId = pedidos[0];
+
+
+        const productsToInsert = pedido_produtos.map(item => ({
+            pedido_id: pedidoId.id,
+            produto_id: item.produto_id,
+            valor_produto: item.valor_produto,
+            quantidade_produto: item.quantidade_produto
+        }));
+
+        await knex("pedido_produtos").insert(productsToInsert);
+
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ messagem: "Erro interno do servidor." })
+    }
+
+    return res.status(201).json()
+}
 module.exports = {
-    listOrders
+    listOrders,
+    orders
 }
