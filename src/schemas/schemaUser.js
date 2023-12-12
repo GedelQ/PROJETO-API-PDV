@@ -39,7 +39,7 @@ const schemaCustomer = joi.object({
   }),
 
   cep: joi.string().regex(/^[0-9]+$/).trim().min(8).max(8).messages({
-    "string.CEP": "O campo CEP precisa ter um formato válido.",
+    "string.cep": "O campo CEP precisa ter um formato válido.",
     "string.min": "O CEP precisa ter 8 caracteres.",
     "string.max": "O CEP precisa ter no máximo 8 caracteres.",
     "string.base": "O campo CEP deve ser string.",
@@ -80,7 +80,7 @@ const schemaCustomer = joi.object({
   }),
 
   estado: joi.string().regex(/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+$/).trim().max(30).messages({
-    "string.CEP": "O campo estado precisa ter um formato válido.",
+    "string.estado": "O campo estado precisa ter um formato válido.",
     "string.base": "O campo estado deve ser string.",
     "string.empty": "O campo estado não pode ser vazio.",
     "string.max": "O campo estado precisa ter no máximo 30 caracteres.",
