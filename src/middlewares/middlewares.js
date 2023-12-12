@@ -1,6 +1,6 @@
 const knex = require("../database/connection")
 const jwt = require("jsonwebtoken")
-const isNumber = require("../services/validatorService")
+
 
 const checkUserToken = async (req, res, next) => {
 
@@ -26,33 +26,4 @@ const checkUserToken = async (req, res, next) => {
     }
 };
 
-function addressValidator(req, res, next) {
-    const { cep, rua, numero, bairro, cidade, estado } = req.body;
-
-    const cepValidator = isNumber(cep)
-    const ruaValidator = isNumber(rua)
-    const numberValidator = isNumber(numero)
-    const neighborValidator = isNumber(bairro)
-    const cityValidator = isNumber(cidade)
-    const stateValidator = isNumber(estado)
-
-
-    if (!cepValidator) { return res.status(400).json({ message: "Preencha o campo CEP somente com números" }) }
-
-    if (ruaValidator) { return res.status(400).json({ message: "Preencha o campo RUA somente com letras" }) }
-
-    if (!numberValidator) { return res.status(400).json({ message: "Preencha o campo NÚMERO somente com números" }) }
-
-    if (neighborValidator) { return res.status(400).json({ message: "Preencha o campo BAIRRO somente com letras" }) }
-
-    if (cityValidator) { return res.status(400).json({ message: "Preencha o campo CIDADE somente com letras" }) }
-
-    if (stateValidator) { return res.status(400).json({ message: "Preencha o campo ESTADO somente com letras" }) }
-
-    next()
-}
-
-module.exports = {
-    checkUserToken,
-    addressValidator
-}
+module.exports = checkUserToken

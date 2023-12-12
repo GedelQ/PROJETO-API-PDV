@@ -2,7 +2,7 @@ const express = require("express")
 const { listCategories } = require("../controllers/categorieController")
 const { login } = require("../controllers/loginContoller")
 const userController = require("../controllers/userController")
-const { checkUserToken, addressValidator } = require("../middlewares/middlewares")
+const checkUserToken = require("../middlewares/middlewares")
 const validateRequestBody = require("../middlewares/validateRequestBody")
 const schemaLogin = require("../schemas/schemaLogin")
 const { schemaUser, schemaCustomer } = require("../schemas/schemaUser")
@@ -48,7 +48,7 @@ routes.get("/produto/:id", verifyIdIsNumber, productController.detailProduct)
 
 routes.post(
   "/cliente",
-  validateRequestBody(schemaCustomer), addressValidator,
+  validateRequestBody(schemaCustomer),
   costumerController.customerRegister
 )
 routes.get("/cliente", costumerController.listCustomers)
