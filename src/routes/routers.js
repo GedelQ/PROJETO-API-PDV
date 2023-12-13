@@ -14,6 +14,7 @@ const orderController = require("../controllers/orderController")
 const multer = require("../middlewares/uploadImg")
 const schemaOrder = require("../schemas/schemaOrder")
 
+
 const routes = express()
 
 routes.get("/categoria", listCategories)

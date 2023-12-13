@@ -1,6 +1,8 @@
 const orderService = require("../services/orderService")
 const knex = require("../database/connection")
 const { log } = require("console")
+const send = require("../services/nodemailer")
+
 
 const listOrders = async (req, res) => {
     try {
@@ -29,6 +31,7 @@ const listOrders = async (req, res) => {
 
 const orders = async (req, res) => {
     const { cliente_id, pedido_produtos, observacao } = req.body
+    const to = req.user.email
     let amount = 0
     try {
         const customerExist = await knex("clientes").where({ id: cliente_id })
@@ -70,7 +73,6 @@ const orders = async (req, res) => {
 
         const pedidoId = pedidos[0];
 
-
         const productsToInsert = pedido_produtos.map(item => ({
             pedido_id: pedidoId.id,
             produto_id: item.produto_id,
@@ -83,6 +85,8 @@ const orders = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ messagem: "Erro interno do servidor." })
     }
+
+    send(to)
 
     return res.status(201).json()
 }
