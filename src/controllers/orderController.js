@@ -29,7 +29,7 @@ const listOrders = async (req, res) => {
 
 const orders = async (req, res) => {
     const { cliente_id, pedido_produtos, observacao } = req.body
-    let total = 0
+    let amount = 0
     try {
         const customerExist = await knex("clientes").where({ id: cliente_id })
 
@@ -41,17 +41,31 @@ const orders = async (req, res) => {
             const productExist = await knex("produtos").where({ id: item.produto_id })
 
             if (productExist.length === 0) {
-                return res.status(404).json({ "messagem": `O produto com id ${item.produto_id} não existe` })
+                return res.status(404).json({ messagem: `O produto com id ${item.produto_id} não existe` })
             }
 
-            total += item.valor_produto
+            if (productExist[0].quantidade_estoque < item.quantidade_produto) {
+                return res.status(400).json({
+                    mensagem: `Para o produto id ${item.produto_id}, temos apenas ${productExist[0].quantidade_estoque} em estoque`
+                })
+            }
+
+            amount += item.valor_produto
         }
 
+        for (let item of pedido_produtos) {
+
+            const stock = await knex("produtos").where({ id: item.produto_id })
+
+            await knex("produtos").update({
+                quantidade_estoque: stock[0].quantidade_estoque - item.quantidade_produto
+            }).where("id", item.produto_id)
+        }
         const pedidos = await knex("pedidos")
             .insert({
                 cliente_id,
                 observacao,
-                valor_total: total
+                valor_total: amount
             }).returning(["id"])
 
         const pedidoId = pedidos[0];
@@ -66,10 +80,7 @@ const orders = async (req, res) => {
 
         await knex("pedido_produtos").insert(productsToInsert);
 
-
-
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ messagem: "Erro interno do servidor." })
     }
 
