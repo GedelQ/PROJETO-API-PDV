@@ -11,5 +11,5 @@ app.use(routes)
 
 const port = process.env.SQL_PORT
 
-app.listen(3000)
+app.listen(port || 3000)
 
