@@ -1,6 +1,7 @@
 const knex = require("../database/connection")
 const jwt = require("jsonwebtoken")
 
+
 const checkUserToken = async (req, res, next) => {
 
     let showStatus = 401
