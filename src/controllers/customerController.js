@@ -3,8 +3,7 @@ const isNumber = require("../services/validatorService")
 const { findById } = require("../services/productService")
 
 const customerRegister = async (req, res) => {
-  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
-
+  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body
 
   try {
     const validator = isNumber(cpf)
@@ -26,10 +25,9 @@ const customerRegister = async (req, res) => {
       return res.status(400).json({ message: "O cliente não foi cadastrado." })
     }
 
-    return res.status(201).json(customer)
-  }
-
+    return res.status(201).json(customer[0])
   catch (error) {
+
     const duplicateMail = "clientes_email_key"
     const duplicateCPF = "clientes_cpf_key"
 
