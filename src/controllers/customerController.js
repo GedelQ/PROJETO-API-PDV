@@ -26,6 +26,7 @@ const customerRegister = async (req, res) => {
     }
 
     return res.status(201).json(customer[0])
+  }
   catch (error) {
 
     const duplicateMail = "clientes_email_key"
