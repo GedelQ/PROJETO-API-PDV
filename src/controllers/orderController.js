@@ -66,9 +66,6 @@ const orders = async (req, res) => {
 
             const productExist = await knex("produtos").where({ id: product.produto_id })
 
-            stock.stockProducts.push({
-                stock: productExist[0].quantidade_estoque
-            })
 
             if (productExist.length === 0) {
                 return res.status(404).json({ messagem: `O produto com id ${product.produto_id} não existe` })
@@ -79,6 +76,11 @@ const orders = async (req, res) => {
                     mensagem: `Para o produto id ${product.produto_id}, temos apenas ${productExist[0].quantidade_estoque} em estoque`
                 })
             }
+
+            stock.stockProducts.push({
+                stock: productExist[0].quantidade_estoque
+            })
+
         }
 
         const pedidos = await knex("pedidos")
@@ -110,7 +112,7 @@ const orders = async (req, res) => {
         return res.status(201).json({ mensagem: "Pedido cadastrado com sucesso" })
 
     } catch (error) {
-
+        console.log(error);
         return res.status(500).json({ messagem: "Erro interno do servidor." })
     }
 
