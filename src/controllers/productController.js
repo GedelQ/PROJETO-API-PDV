@@ -5,7 +5,7 @@ const awsService = require('../services/s3Service')
 
 const productCreation = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body
-  const  produto_imagem  = req.file
+  const produto_imagem = req.file
 
   try {
     const productExists = await productService.findByName("produtos", descricao)
@@ -32,7 +32,7 @@ const productCreation = async (req, res) => {
 
     const arquivo = await awsService.uploadFile(`imagens/${produto_imagem.originalname}`, produto_imagem.buffer, produto_imagem.mimetype)
 
-     const product = await knex("produtos").insert({
+    const product = await knex("produtos").insert({
       descricao,
       quantidade_estoque,
       valor,
@@ -82,7 +82,7 @@ const updateProducts = async (req, res) => {
       })
       .where({ id: id }).returning('*')
 
-      return res.status(200).json(product[0])
+    return res.status(200).json(product[0])
   } catch (error) {
     return res.status(500).json({ message: "Erro interno do servidor." })
   }
@@ -136,14 +136,20 @@ const deleteProduct = async (req, res) => {
 
     const productFound = await knex("produtos")
       .where("id", productId)
-      .first()
       .del()
+      .returning("*")
 
     if (!productFound) {
       return res.status(404).json({ messagem: "Produto não encontrado." })
     }
 
-    return res.status(200).json({ message: "Produto removido." })
+    if (productFound.produto_imagem !== null) {
+      const itemASerDeletado = await awsService.deleteFile(productFound[0].produto_imagem)
+
+      return res.status(200).json({ message: "Produto e imagem removidos." })
+    } else {
+      return res.status(200).json({ message: "Produto removido." })
+    }
   } catch (error) {
     return res.status(500).json({ message: "Erro interno do servidor." })
   }
