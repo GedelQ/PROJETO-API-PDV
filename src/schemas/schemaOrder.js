@@ -19,57 +19,31 @@ const schemaOrder = joi.object({
 
     pedido_produtos: joi.array().items(joi.object({
 
-        produto_id: joi.number().integer().positive().required().messages({
+        produto_id: joi.number().strict().integer().positive().required().messages({
             'any.required': 'O campo produto_id é obrigatório',
             'number.base': 'O campo produto_id deve ser um número',
             'number.positive': 'O campo produto_id deve ser um número positivo.',
             'number.greater': 'O campo produto_id deve ser maior que zero',
             'number.integer': 'O campo produto_id deve ser um número inteiro'
         }),
-        quantidade_produto: joi.number().integer().positive().required().messages({
+        quantidade_produto: joi.number().strict().integer().positive().required().messages({
             'any.required': 'O campo quantidade_produto é obrigatório',
             'number.base': 'O campo quantidade_produto deve ser um número',
             'number.positive': 'O campo quantidade_produto deve ser um número positivo.',
             'number.greater': 'O campo quantidade_produto deve ser maior que zero',
             'number.integer': 'O campo quantidade_produto deve ser um número inteiro'
         }),
-        valor_produto: joi.number().integer().positive().messages({
+        valor_produto: joi.number().strict().integer().positive().messages({
             'any.required': 'O campo valor_produto é obrigatório',
             'number.base': 'O campo valor_produto deve ser um número',
             'number.positive': 'O campo valor_produto deve ser um número positivo.',
             'number.greater': 'O campo valor_produto deve ser maior que zero',
             'number.integer': 'O campo valor_produto deve ser um número inteiro'
         }),
-    }))
-
+    })).required().messages({
+        'any.required': 'O objeto pedido_produtos é obrigatório'
+    })
 
 })
-
-// const schemaItens = joi.array().items(joi.object({
-
-//     produto_id: joi.number().integer().positive().required().messages({
-//         'any.required': 'O campo produto_id é obrigatório',
-//         'number.base': 'O campo produto_id deve ser um número',
-//         'number.positive': 'O campo produto_id deve ser um número positivo.',
-//         'number.greater': 'O campo produto_id deve ser maior que zero',
-//         'number.integer': 'O campo produto_id deve ser um número inteiro'
-//     }),
-
-//     quantidade_produto: joi.number().integer().positive().required().messages({
-//         'any.required': 'O campo quantidade_produto é obrigatório',
-//         'number.base': 'O campo quantidade_produto deve ser um número',
-//         'number.positive': 'O campo quantidade_produto deve ser um número positivo.',
-//         'number.greater': 'O campo quantidade_produto deve ser maior que zero',
-//         'number.integer': 'O campo quantidade_produto deve ser um número inteiro'
-//     }),
-
-//     valor_produto: joi.number().integer().positive().messages({
-//         'any.required': 'O campo valor_produto é obrigatório',
-//         'number.base': 'O campo valor_produto deve ser um número',
-//         'number.positive': 'O campo valor_produto deve ser um número positivo.',
-//         'number.greater': 'O campo valor_produto deve ser maior que zero',
-//         'number.integer': 'O campo valor_produto deve ser um número inteiro'
-//     }),
-// }))
 
 module.exports = schemaOrder
