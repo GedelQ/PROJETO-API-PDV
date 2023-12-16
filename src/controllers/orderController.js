@@ -55,8 +55,11 @@ const orders = async (req, res) => {
                     valor_produto: item.valor_produto * item.quantidade_produto
                 })
             } else {
-                productsToCheck.produtos[existingProductIndex].quantidade_produto += item.quantidade_produto
-                productsToCheck.produtos[existingProductIndex].valor_produto += item.valor_produto * item.quantidade_produto
+                return res.status(400).json({
+                    messagem: `Você está tentando cadastrar o produto id ${productId} mais de uma vez`
+                })
+                // productsToCheck.produtos[existingProductIndex].quantidade_produto += item.quantidade_produto
+                // productsToCheck.produtos[existingProductIndex].valor_produto += item.valor_produto * item.quantidade_produto
             }
 
             totalAmount += item.valor_produto * item.quantidade_produto

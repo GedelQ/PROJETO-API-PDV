@@ -2,7 +2,7 @@ const joi = require("joi")
 
 const schemaOrder = joi.object({
 
-    cliente_id: joi.number().integer().positive().required().messages({
+    cliente_id: joi.number().strict().integer().positive().required().messages({
         'any.required': 'O campo cliente_id é obrigatório',
         'number.base': 'O campo cliente_id deve ser um número',
         'number.positive': 'O campo cliente_id deve ser um número positivo.',
@@ -33,7 +33,7 @@ const schemaOrder = joi.object({
             'number.greater': 'O campo quantidade_produto deve ser maior que zero',
             'number.integer': 'O campo quantidade_produto deve ser um número inteiro'
         }),
-        valor_produto: joi.number().strict().integer().positive().messages({
+        valor_produto: joi.number().strict().integer().positive().required().messages({
             'any.required': 'O campo valor_produto é obrigatório',
             'number.base': 'O campo valor_produto deve ser um número',
             'number.positive': 'O campo valor_produto deve ser um número positivo.',
