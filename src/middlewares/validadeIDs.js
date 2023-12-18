@@ -1,4 +1,4 @@
-const { schemaCaterogiaIDArray, schemaClienteIDArray } = require("../schemas/schemaIDs");
+const { schemaCaterogiaIDArray } = require("../schemas/schemaIDs");
 
 const validateCategoriaID = (joiSchema) => async (req, res, next) => {
     try {
@@ -12,8 +12,8 @@ const validateCategoriaID = (joiSchema) => async (req, res, next) => {
             }
         } else if (type === typeof []) {
             req.query.categoria_id = req.query.categoria_id.map(n => n = +n)
-            joiSchema = schemaCaterogiaIDArray;
-            await joiSchema.validateAsync(req.query)
+            const joiSchema2 = schemaCaterogiaIDArray;
+            await joiSchema2.validateAsync(req.query)
         }
 
         next()
