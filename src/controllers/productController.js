@@ -9,7 +9,7 @@ const productCreation = async (req, res) => {
   try {
     const productExists = await productService.findByName("produtos", descricao)
 
-    if (productExists.id !== 0) {
+    if (productExists.id > 0) {
       throw ({ message: "Not Unique" })
     }
 
