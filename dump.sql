@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS clientes (
 CREATE TABLE IF NOT EXISTS pedidos (
     id                  SERIAL PRIMARY KEY,
     cliente_id          INT NOT NULL REFERENCES clientes(id),
-    observacao          VARCHAR(150) NOT NULL,
+    observacao          VARCHAR(150),
     valor_total         INT NOT NULL
 );
 
