@@ -11,7 +11,7 @@ const schemaProduct = joi.object({
     'number.base': 'O campo quantidade do estoque deve ser um número',
     'number.positive': 'O campo quantidade do estoque deve ser um número positivo.',
     'number.greater': 'O campo quantidade do estoque deve ser maior que zero',
-    'number.integer': 'O campo quantidade do estoque deve ser um número inteiro'
+    'number.integer': 'O campo quantidade do estoque deve ser um número inteiro',
   }),
   valor: joi.number().integer().positive().required().messages({
     'any.required': 'O campo valor é obrigatório',
@@ -26,6 +26,10 @@ const schemaProduct = joi.object({
     'number.integer': 'O campo categoria_id deve ser um número inteiro',
     'number.positive': 'O campo categoria_id deve ser um número positivo',
     'number.integer': 'O campo categoria_id deve ser um número inteiro',
+  }),
+  produto_imagem: joi.string().messages({
+    'object.unknown': 'O campo produto_imagem não pode ser vazio.',
+    'string.empty': 'O campo produto_imagem não pode ser vazio.',
   }),
 })
 

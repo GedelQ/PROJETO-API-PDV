@@ -1,11 +1,10 @@
-const { json } = require("express")
 const knex = require("../database/connection")
 const productService = require("../services/productService")
 const awsService = require('../services/s3Service')
 
 const productCreation = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body
-  const produto_imagem = req.file
+  let produto_imagem = req.file
 
   try {
     const productExists = await productService.findByName("produtos", descricao)
@@ -13,7 +12,7 @@ const productCreation = async (req, res) => {
     if (productExists.id > 0) {
       const newQtd = Number(productExists.quantidade_estoque) + Number(quantidade_estoque)
 
-      const addQtdProduct = await knex("produtos")
+     await knex("produtos")
         .where({ descricao: descricao })
         .update({ quantidade_estoque: newQtd })
 
@@ -28,16 +27,19 @@ const productCreation = async (req, res) => {
       categoria_id
     )
 
-    if (!categoryExist) return res.status(404).json("Categoria inválida.")
-
-    const arquivo = await awsService.uploadFile(`imagens/${produto_imagem.originalname}`, produto_imagem.buffer, produto_imagem.mimetype)
+    if (!categoryExist) return res.status(404).json({ message:"Categoria inválida." })
+  
+    if (produto_imagem) {
+      const arquivo = await awsService.uploadFile(`imagens/${produto_imagem.originalname}`, produto_imagem.buffer, produto_imagem.mimetype)
+      produto_imagem =  arquivo.url
+    }
 
     const product = await knex("produtos").insert({
       descricao,
-      quantidade_estoque,
+      quantidade_estoque: Number(quantidade_estoque),
       valor,
       categoria_id,
-      produto_imagem: arquivo.url
+      produto_imagem
     }).returning('*')
 
     if (!product) {
@@ -53,7 +55,7 @@ const productCreation = async (req, res) => {
 const updateProducts = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body
   const { id } = req.params
-  const produto_imagem = req.file
+  let produto_imagem = req.file
 
 
   try {
@@ -68,17 +70,20 @@ const updateProducts = async (req, res) => {
       "categorias",
       categoria_id
     )
-    if (!categoryExist) return res.status(404).json("Categoria inválida.")
+    if (!categoryExist) return res.status(404).json({ message:"Categoria inválida." })
 
-    const arquivo = await awsService.uploadFile(`imagens/${produto_imagem.originalname}`, produto_imagem.buffer, produto_imagem.mimetype)
-
+    if (produto_imagem) {
+      const arquivo = await awsService.uploadFile(`imagens/${produto_imagem.originalname}`, produto_imagem.buffer, produto_imagem.mimetype)
+      produto_imagem = arquivo.url
+    }
+    
     const product = await knex("produtos")
       .update({
         descricao,
         quantidade_estoque,
         valor,
         categoria_id,
-        produto_imagem: arquivo.url
+        produto_imagem
       })
       .where({ id: id }).returning('*')
 
