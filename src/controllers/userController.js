@@ -29,9 +29,13 @@ const userRegister = async (req, res) => {
 }
 
 const userDetail = async (req, res) => {
+
   const user = req.user
 
   return res.status(200).json(user)
+
+
+
 }
 
 const userUpdate = async (req, res) => {
