@@ -27,7 +27,7 @@ const productCreation = async (req, res) => {
       categoria_id
     )
 
-    if (!categoryExist) return res.status(404).json("Categoria inválida.")
+    if (!categoryExist) return res.status(404).json({ message:"Categoria inválida." })
   
     if (produto_imagem) {
       const arquivo = await awsService.uploadFile(`imagens/${produto_imagem.originalname}`, produto_imagem.buffer, produto_imagem.mimetype)
