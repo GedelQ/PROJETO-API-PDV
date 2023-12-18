@@ -43,7 +43,7 @@ const customerRegister = async (req, res) => {
 
 const listCustomers = async (req, res) => {
   try {
-    const checkCostumer = await knex("clientes")
+    const checkCostumer = await knex("clientes").orderBy("id")
     if (checkCostumer.length < 1) {
       return res
         .status(404)
