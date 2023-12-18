@@ -86,6 +86,18 @@ const updateProducts = async (req, res) => {
 
     return res.status(200).json(product[0])
   } catch (error) {
+    if (error.message.toLowerCase().includes(`unique`)) {
+      return res.status(400).json({
+        message:
+          "Já possuimos outro cadastro de produto com a mesma descrição, por favor verifique os dados informados e tente novamente."
+      })
+    }
+    if (error.code === "22003") {
+      return res.status(400).json({
+        message:
+          "O produto_id informado excede o tamanho permitido"
+      })
+    }
     return res.status(500).json({ message: "Erro interno do servidor." })
   }
 }
@@ -102,6 +114,7 @@ const listProducts = async (req, res) => {
 
     return res.status(200).json(products)
   } catch (error) {
+    console.log(error.message);
     if (
       error.message.toLowerCase().includes(`inválida`)
       || error.message.toLowerCase().includes(`invalid`)
@@ -111,10 +124,16 @@ const listProducts = async (req, res) => {
           "Uma ou mais categorias são inválidas. Por favor verifique se esta inserindo apenas números."
       })
     }
-    if (error.message.toLowerCase().includes(`Not Found`)) {
+    if (error.message.includes(`Not Found`)) {
       return res.status(404).json({
         message:
           "Nenhum produto encontrado."
+      })
+    }
+    if (error.code === "22003") {
+      return res.status(400).json({
+        message:
+          "O categoria_id informado excede o tamanho permitido"
       })
     }
 
@@ -135,6 +154,12 @@ const detailProduct = async (req, res) => {
     }
     return res.status(200).json(productFound)
   } catch (error) {
+    if (error.code === "22003") {
+      return res.status(400).json({
+        message:
+          "O produto_id informado excede o tamanho permitido"
+      })
+    }
     return res.status(500).json({ message: "Erro interno do servidor." })
   }
 }
@@ -145,7 +170,7 @@ const deleteProduct = async (req, res) => {
 
     const orderExist = await knex("pedido_produtos").where({ produto_id: productId })
     if (orderExist.length !== 0) {
-      return res.status(404).json({ message: "Produto consta em um pedido já cadastrado. Não foi possível realizar a exclusão." })
+      return res.status(400).json({ message: "Produto consta em um pedido já cadastrado. Não foi possível realizar a exclusão." })
     }
 
     const productFound = await knex("produtos")
@@ -165,6 +190,12 @@ const deleteProduct = async (req, res) => {
       return res.status(200).json({ message: "Produto removido." })
     }
   } catch (error) {
+    if (error.code === "22003") {
+      return res.status(400).json({
+        message:
+          "O produto_id informado excede o tamanho permitido"
+      })
+    }
     return res.status(500).json({ message: "Erro interno do servidor." })
   }
 }

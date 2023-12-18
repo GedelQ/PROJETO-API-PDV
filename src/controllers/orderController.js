@@ -25,10 +25,16 @@ const listOrders = async (req, res) => {
                     "Cliente_id inválido. Por favor verifique se esta inserindo apenas números."
             })
         }
-        if (error.message.toLowerCase().includes(`Not Found`)) {
+        if (error.message.includes(`Not Found`)) {
             return res.status(404).json({
                 message:
                     "Nenhum pedido encontrado."
+            })
+        }
+        if (error.code === "22003") {
+            return res.status(400).json({
+                message:
+                    "O client_id informado excede o tamanho permitido"
             })
         }
 
@@ -121,7 +127,18 @@ const orders = async (req, res) => {
         return res.status(201).json({ mensagem: "Pedido cadastrado com sucesso" })
 
     } catch (error) {
-        console.log(error);
+        if (error.message.includes(`clientes`)) {
+            return res.status(400).json({
+                message:
+                    "O cliente_id informado excede o tamanho permitido"
+            })
+        }
+        if (error.message.includes(`produtos`)) {
+            return res.status(400).json({
+                message:
+                    "O produto_id informado excede o tamanho permitido"
+            })
+        }
         return res.status(500).json({ messagem: "Erro interno do servidor." })
     }
 
