@@ -12,6 +12,8 @@ const costumerController = require("../controllers/customerController")
 const verifyIdIsNumber = require("../middlewares/verifyIdIsNumber")
 const orderController = require("../controllers/orderController")
 const multer = require("../middlewares/uploadImg")
+const schemaOrder = require("../schemas/schemaOrder")
+
 
 const routes = express()
 
@@ -61,5 +63,7 @@ routes.put(
 routes.get("/cliente/:id", verifyIdIsNumber, costumerController.datailCustomers)
 
 routes.get("/pedido", orderController.listOrders)
+
+routes.post("/pedido", validateRequestBody(schemaOrder), orderController.orders)
 
 module.exports = routes
