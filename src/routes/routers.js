@@ -13,6 +13,8 @@ const verifyIdIsNumber = require("../middlewares/verifyIdIsNumber")
 const orderController = require("../controllers/orderController")
 const multer = require("../middlewares/uploadImg")
 const schemaOrder = require("../schemas/schemaOrder")
+const { validateCategoriaID, validateClienteID } = require("../middlewares/validadeIDs")
+const { schemaCaterogiaID, schemaClienteID } = require("../schemas/schemaIDs")
 
 
 const routes = express()
@@ -39,7 +41,7 @@ routes.post(
   validateRequestBody(schemaProduct),
   productController.productCreation
 )
-routes.get("/produto", productController.listProducts)
+routes.get("/produto", validateCategoriaID(schemaCaterogiaID), productController.listProducts)
 routes.put(
   "/produto/:id", multer.single('produto_imagem'),
   verifyIdIsNumber,
@@ -62,7 +64,7 @@ routes.put(
 )
 routes.get("/cliente/:id", verifyIdIsNumber, costumerController.datailCustomers)
 
-routes.get("/pedido", orderController.listOrders)
+routes.get("/pedido", validateClienteID(schemaClienteID), orderController.listOrders)
 
 routes.post("/pedido", validateRequestBody(schemaOrder), orderController.orders)
 

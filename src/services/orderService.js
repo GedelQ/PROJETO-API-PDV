@@ -3,7 +3,7 @@ const knex = require("../database/connection")
 findByClient = async (cliente_id) => {
 
     if (cliente_id) {
-        const orders = await knex("pedidos").where("cliente_id", cliente_id)
+        const orders = await knex("pedidos").where("cliente_id", cliente_id).orderBy("id")
 
         if (orders.length !== 0) {
             let orderAndProducts = []
@@ -20,7 +20,7 @@ findByClient = async (cliente_id) => {
         return orders
     }
 
-    const orders = await knex("pedidos")
+    const orders = await knex("pedidos").orderBy("id")
 
     if (orders.length !== 0) {
         let orderAndProducts = []

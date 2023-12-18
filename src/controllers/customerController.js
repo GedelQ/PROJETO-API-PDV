@@ -26,7 +26,7 @@ const customerRegister = async (req, res) => {
     }
 
     return res.status(201).json(customer[0])
- 
+
   } catch (error) {
 
     const duplicateMail = "clientes_email_key"
@@ -43,7 +43,7 @@ const customerRegister = async (req, res) => {
 
 const listCustomers = async (req, res) => {
   try {
-    const checkCostumer = await knex("clientes")
+    const checkCostumer = await knex("clientes").orderBy("id")
     if (checkCostumer.length < 1) {
       return res
         .status(404)
@@ -70,6 +70,12 @@ const datailCustomers = async (req, res) => {
 
     return res.status(200).json(costumer)
   } catch (error) {
+    if (error.code === "22003") {
+      return res.status(400).json({
+        message:
+          "O cliente_id informado excede o tamanho permitido"
+      })
+    }
     return res.status(500).json({ message: "Erro interno do servidor" })
   }
 }
@@ -130,6 +136,11 @@ const customerUpdate = async (req, res) => {
       return res.status(400).json({ message: "E-mail já existe." })
     } else if (error.message.includes(duplicateCPF)) {
       return res.status(400).json({ message: "CPF já existe." })
+    } else if (error.code === "22003") {
+      return res.status(400).json({
+        message:
+          "O cliente_id informado excede o tamanho permitido"
+      })
     } else return res.status(500).json({ message: "Erro interno do servidor." })
   }
 }

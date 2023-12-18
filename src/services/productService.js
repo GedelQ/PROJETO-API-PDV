@@ -19,13 +19,13 @@ findByCategory = async (categoria_id) => {
   let products
 
   if (!categoria_id) {
-    products = await knex("produtos")
+    products = await knex("produtos").orderBy("id")
 
-  } else if (typeof categoria_id === typeof "string") {
-    products = await knex("produtos").where("categoria_id", categoria_id)
+  } else if (typeof categoria_id === typeof 1) {
+    products = await knex("produtos").where("categoria_id", categoria_id).orderBy("id")
   }
   else {
-    products = await knex("produtos").whereIn("categoria_id", [...categoria_id])
+    products = await knex("produtos").whereIn("categoria_id", [...categoria_id]).orderBy("id")
   }
 
   return products
