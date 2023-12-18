@@ -2,6 +2,7 @@ const { schemaCaterogiaIDArray, schemaClienteIDArray } = require("../schemas/sch
 
 const validateCategoriaID = (joiSchema) => async (req, res, next) => {
     try {
+        req.query.categoria_id = req.query.categoria_id.trim()
         if (typeof req.query.categoria_id === typeof "String" && req.query.categoria_id !== "") {
             req.query.categoria_id = +req.query.categoria_id
             await joiSchema.validateAsync(req.query)
@@ -17,6 +18,7 @@ const validateCategoriaID = (joiSchema) => async (req, res, next) => {
     }
 }
 const validateClienteID = (joiSchema) => async (req, res, next) => {
+    req.query.cliente_id = req.query.cliente_id.trim()
     try {
         if (req.query.cliente_id !== "") {
             req.query.cliente_id = +req.query.cliente_id
