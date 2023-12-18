@@ -21,7 +21,7 @@ findByCategory = async (categoria_id) => {
   if (!categoria_id) {
     products = await knex("produtos")
 
-  } else if (typeof categoria_id === typeof "string") {
+  } else if (typeof categoria_id === typeof 1) {
     products = await knex("produtos").where("categoria_id", categoria_id)
   }
   else {

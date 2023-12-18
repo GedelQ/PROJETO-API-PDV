@@ -114,16 +114,6 @@ const listProducts = async (req, res) => {
 
     return res.status(200).json(products)
   } catch (error) {
-    console.log(error.message);
-    if (
-      error.message.toLowerCase().includes(`inválida`)
-      || error.message.toLowerCase().includes(`invalid`)
-    ) {
-      return res.status(400).json({
-        message:
-          "Uma ou mais categorias são inválidas. Por favor verifique se esta inserindo apenas números."
-      })
-    }
     if (error.message.includes(`Not Found`)) {
       return res.status(404).json({
         message:
