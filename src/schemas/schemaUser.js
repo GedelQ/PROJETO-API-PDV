@@ -47,7 +47,7 @@ const schemaCustomer = joi.object({
     "string.pattern.base": "O cep deve conter apenas números sem espaços"
   }),
 
-  rua: joi.string().regex(/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+$/).trim().max(50).messages({
+  rua: joi.string().trim().max(50).messages({
     "string.rua": "O campo rua precisa ter um formato válido.",
     "string.base": "O campo rua deve ser string.",
     "string.empty": "O campo rua não pode ser vazio.",
@@ -63,7 +63,7 @@ const schemaCustomer = joi.object({
     "string.pattern.base": "O campo numero deve conter apenas números sem espaços"
   }),
 
-  bairro: joi.string().regex(/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+$/).trim().max(50).messages({
+  bairro: joi.string().trim().max(50).messages({
     "string.bairro": "O campo bairro precisa ter um formato válido.",
     "string.base": "O campo bairro deve ser string.",
     "string.empty": "O campo bairro não pode ser vazio.",
@@ -71,7 +71,7 @@ const schemaCustomer = joi.object({
     "string.pattern.base": "O campo bairro deve conter apenas letras"
   }),
 
-  cidade: joi.string().regex(/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+$/).trim().max(50).messages({
+  cidade: joi.string().trim().max(50).messages({
     "string.cidade": "O campo cidade precisa ter um formato válido.",
     "string.base": "O campo cidade deve ser string.",
     "string.empty": "O campo cidade não pode ser vazio.",
