@@ -12,7 +12,7 @@ const productCreation = async (req, res) => {
     if (productExists.id > 0) {
       const newQtd = Number(productExists.quantidade_estoque) + Number(quantidade_estoque)
 
-     await knex("produtos")
+      await knex("produtos")
         .where({ descricao: descricao })
         .update({ quantidade_estoque: newQtd })
 
@@ -27,11 +27,11 @@ const productCreation = async (req, res) => {
       categoria_id
     )
 
-    if (!categoryExist) return res.status(404).json({ message:"Categoria inválida." })
-  
+    if (!categoryExist) return res.status(404).json({ message: "Categoria inválida." })
+
     if (produto_imagem) {
       const arquivo = await awsService.uploadFile(`imagens/${produto_imagem.originalname}`, produto_imagem.buffer, produto_imagem.mimetype)
-      produto_imagem =  arquivo.url
+      produto_imagem = arquivo.url
     }
 
     const product = await knex("produtos").insert({
@@ -70,13 +70,13 @@ const updateProducts = async (req, res) => {
       "categorias",
       categoria_id
     )
-    if (!categoryExist) return res.status(404).json({ message:"Categoria inválida." })
+    if (!categoryExist) return res.status(404).json({ message: "Categoria inválida." })
 
     if (produto_imagem) {
       const arquivo = await awsService.uploadFile(`imagens/${produto_imagem.originalname}`, produto_imagem.buffer, produto_imagem.mimetype)
       produto_imagem = arquivo.url
     }
-    
+
     const product = await knex("produtos")
       .update({
         descricao,
@@ -100,17 +100,24 @@ const listProducts = async (req, res) => {
     const products = await findByCategory(categoria_id)
 
     if (products.length === 0) {
-      throw ({ message: "Invalid" })
+      throw ({ message: "Not Found" })
     }
 
     return res.status(200).json(products)
   } catch (error) {
     if (
-      error.message.toLowerCase().includes(`inválida`) || error.message.toLowerCase().includes(`invalid`)
+      error.message.toLowerCase().includes(`inválida`)
+      || error.message.toLowerCase().includes(`invalid`)
     ) {
       return res.status(400).json({
         message:
           "Uma ou mais categorias são inválidas. Por favor verifique se esta inserindo apenas números e se a categoria solicitada existe."
+      })
+    }
+    if (error.message.toLowerCase().includes(`Not Found`)) {
+      return res.status(404).json({
+        message:
+          "Nenhum produto encontrado."
       })
     }
 
@@ -152,9 +159,9 @@ const deleteProduct = async (req, res) => {
     if (productFound.length === 0) {
       return res.status(404).json({ messagem: "Produto não encontrado." })
     }
-  
+
     if (productFound[0].produto_imagem) {
-     await awsService.deleteFile(productFound[0].produto_imagem)
+      await awsService.deleteFile(productFound[0].produto_imagem)
 
       return res.status(200).json({ message: "Produto e imagem removidos." })
     } else {

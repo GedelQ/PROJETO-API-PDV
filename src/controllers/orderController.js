@@ -10,19 +10,25 @@ const listOrders = async (req, res) => {
         const orders = await findByClient(cliente_id)
 
         if (orders.length === 0) {
-            throw ({ message: "Invalid" })
+            throw ({ message: "Not Found" })
         }
 
         return res.status(200).json(orders)
     } catch (error) {
         if (
-            error.message.toLowerCase().includes(`inválida`) 
+            error.message.toLowerCase().includes(`inválida`)
             || error.message.toLowerCase().includes(`invalid`)
             || error.message.toLowerCase().includes(`not defined`)
         ) {
             return res.status(400).json({
                 message:
                     "Cliente_id inválido. Por favor verifique se esta inserindo apenas números e se o Cliente solicitado existe."
+            })
+        }
+        if (error.message.toLowerCase().includes(`Not Found`)) {
+            return res.status(404).json({
+                message:
+                    "Nenhum pedido encontrado."
             })
         }
 
