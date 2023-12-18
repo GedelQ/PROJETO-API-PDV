@@ -22,7 +22,7 @@ const listOrders = async (req, res) => {
         ) {
             return res.status(400).json({
                 message:
-                    "Cliente_id inválido. Por favor verifique se esta inserindo apenas números e se o Cliente solicitado existe."
+                    "Cliente_id inválido. Por favor verifique se esta inserindo apenas números."
             })
         }
         if (error.message.toLowerCase().includes(`Not Found`)) {

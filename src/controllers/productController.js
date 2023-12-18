@@ -111,7 +111,7 @@ const listProducts = async (req, res) => {
     ) {
       return res.status(400).json({
         message:
-          "Uma ou mais categorias são inválidas. Por favor verifique se esta inserindo apenas números e se a categoria solicitada existe."
+          "Uma ou mais categorias são inválidas. Por favor verifique se esta inserindo apenas números."
       })
     }
     if (error.message.toLowerCase().includes(`Not Found`)) {
