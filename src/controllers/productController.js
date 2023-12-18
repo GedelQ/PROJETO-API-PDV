@@ -1,5 +1,5 @@
 const knex = require("../database/connection")
-const productService = require("../services/productService")
+const { findById, findByName, findByCategory } = require("../services/productService")
 const awsService = require('../services/s3Service')
 
 const productCreation = async (req, res) => {
@@ -7,13 +7,13 @@ const productCreation = async (req, res) => {
   let produto_imagem = req.file
 
   try {
-    const productExists = await productService.findByName("produtos", descricao)
+    const productExists = await findByName("produtos", descricao)
 
     if (productExists.id > 0) {
       throw ({ message: "Not Unique" })
     }
 
-    const categoryExist = await productService.findById(
+    const categoryExist = await findById(
       "categorias",
       categoria_id
     )
@@ -56,14 +56,14 @@ const updateProducts = async (req, res) => {
 
 
   try {
-    const productExist = await productService.findById("produtos", id)
+    const productExist = await findById("produtos", id)
 
     if (!productExist)
       return res
         .status(404)
         .json({ message: "Produto não existe em nosso estoque." })
 
-    const categoryExist = await productService.findById(
+    const categoryExist = await findById(
       "categorias",
       categoria_id
     )
