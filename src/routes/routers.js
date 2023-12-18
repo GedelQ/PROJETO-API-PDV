@@ -9,10 +9,15 @@ const { schemaUser, schemaCustomer } = require("../schemas/schemaUser")
 const schemaProduct = require("../schemas/schemaProduct")
 const productController = require("../controllers/productController")
 const costumerController = require("../controllers/customerController")
+const verifyIdIsNumber = require("../middlewares/verifyIdIsNumber")
+const orderController = require("../controllers/orderController")
+const multer = require("../middlewares/uploadImg")
+const schemaOrder = require("../schemas/schemaOrder")
+
 
 const routes = express()
 
-routes.get("/categorias", listCategories)
+routes.get("/categoria", listCategories)
 routes.post(
   "/usuario",
   validateRequestBody(schemaUser),
@@ -28,19 +33,21 @@ routes.put(
   validateRequestBody(schemaUser),
   userController.userUpdate
 )
+
 routes.post(
-  "/produto",
+  "/produto", multer.single('produto_imagem'),
   validateRequestBody(schemaProduct),
   productController.productCreation
 )
 routes.get("/produto", productController.listProducts)
 routes.put(
-  "/produto/:id",
+  "/produto/:id", multer.single('produto_imagem'),
+  verifyIdIsNumber,
   validateRequestBody(schemaProduct),
   productController.updateProducts
 )
-routes.delete("/produto/:id", productController.deleteProduct)
-routes.get("/produto/:id", productController.detailProduct)
+routes.delete("/produto/:id", verifyIdIsNumber, productController.deleteProduct)
+routes.get("/produto/:id", verifyIdIsNumber, productController.detailProduct)
 
 routes.post(
   "/cliente",
@@ -53,6 +60,10 @@ routes.put(
   validateRequestBody(schemaCustomer),
   costumerController.customerUpdate
 )
-routes.get("/cliente/:id", costumerController.datailCustomers)
+routes.get("/cliente/:id", verifyIdIsNumber, costumerController.datailCustomers)
+
+routes.get("/pedido", orderController.listOrders)
+
+routes.post("/pedido", validateRequestBody(schemaOrder), orderController.orders)
 
 module.exports = routes
