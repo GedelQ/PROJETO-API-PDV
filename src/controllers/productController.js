@@ -152,9 +152,9 @@ const deleteProduct = async (req, res) => {
     if (productFound.length === 0) {
       return res.status(404).json({ messagem: "Produto não encontrado." })
     }
-
-    if (productFound.produto_imagem !== null) {
-      const itemASerDeletado = await awsService.deleteFile(productFound[0].produto_imagem)
+  
+    if (productFound[0].produto_imagem) {
+     await awsService.deleteFile(productFound[0].produto_imagem)
 
       return res.status(200).json({ message: "Produto e imagem removidos." })
     } else {
