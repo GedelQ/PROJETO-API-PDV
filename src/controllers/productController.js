@@ -133,18 +133,18 @@ const detailProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const productId = req.params.id
-    
+
     const orderExist = await knex("pedido_produtos").where({ produto_id: productId })
-    if (orderExist) {
+    if (orderExist.length !== 0) {
       return res.status(404).json({ message: "Produto consta em um pedido já cadastrado. Não foi possível realizar a exclusão." })
     }
-    
+
     const productFound = await knex("produtos")
       .where("id", productId)
       .del()
       .returning("*")
 
-    if (!productFound) {
+    if (productFound.length === 0) {
       return res.status(404).json({ messagem: "Produto não encontrado." })
     }
 
