@@ -1,7 +1,7 @@
 
 const knex = require("../database/connection")
 const send = require("../services/nodemailer")
-
+const { findByClient } = require("../services/orderService")
 
 const listOrders = async (req, res) => {
     try {
@@ -16,7 +16,9 @@ const listOrders = async (req, res) => {
         return res.status(200).json(orders)
     } catch (error) {
         if (
-            error.message.toLowerCase().includes(`inválida`) || error.message.toLowerCase().includes(`invalid`)
+            error.message.toLowerCase().includes(`inválida`) 
+            || error.message.toLowerCase().includes(`invalid`)
+            || error.message.toLowerCase().includes(`not defined`)
         ) {
             return res.status(400).json({
                 message:
