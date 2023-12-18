@@ -4,7 +4,7 @@ const validateCategoriaID = (joiSchema) => async (req, res, next) => {
     try {
         const type = typeof req.query.categoria_id
 
-        if (type === typeof "String") {
+        if (type === typeof "String" || type === typeof 1) {
             req.query.categoria_id = req.query.categoria_id.trim()
             if (req.query.categoria_id !== "") {
                 req.query.categoria_id = +req.query.categoria_id
