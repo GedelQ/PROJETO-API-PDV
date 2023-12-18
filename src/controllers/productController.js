@@ -9,17 +9,8 @@ const productCreation = async (req, res) => {
   try {
     const productExists = await productService.findByName("produtos", descricao)
 
-    if (productExists.id > 0) {
-      const newQtd = Number(productExists.quantidade_estoque) + Number(quantidade_estoque)
-
-      await knex("produtos")
-        .where({ descricao: descricao })
-        .update({ quantidade_estoque: newQtd })
-
-      return res.status(200).json({
-        message:
-          "Produto existente em nosso estoque, quantidade somada no produto.",
-      })
+    if (productExists.id !== 0) {
+      throw ({ message: "Not Unique" })
     }
 
     const categoryExist = await productService.findById(
@@ -48,6 +39,12 @@ const productCreation = async (req, res) => {
 
     return res.status(201).json(product[0])
   } catch (error) {
+    if (error.message.toLowerCase().includes(`unique`)) {
+      return res.status(400).json({
+        message:
+          "Produto existente em nosso estoque."
+      })
+    }
     return res.status(500).json({ message: "Erro interno do servidor." })
   }
 }
